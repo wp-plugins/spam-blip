@@ -129,7 +129,7 @@ endif;
 if ( ! class_exists('Spam_BLIP_class') ) :
 class Spam_BLIP_class {
 	// for debugging: set false for release
-	const DBG = true;
+	const DBG = false;
 	
 	// web page as of release
 	const plugin_webpage = 'http://agalena.nfshost.com/b1/?page_id=211';
