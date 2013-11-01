@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Spam BLIP
-Plugin URI: http://agalena.nfshost.com/b1/?page_id=<CHANGE_ME>
+Plugin URI: http://agalena.nfshost.com/b1/?page_id=211
 Description: Stop comment spam before it is posted.
-Version: 1.0.0
+Version: 1.0.1
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -816,7 +816,7 @@ class Spam_BLIP_class {
 	public function settings_js() {
 		$jsfn = self::settings_jsname;
 		$j = $this->settings_js;
-        wp_enqueue_script($jsfn, $j);
+		wp_enqueue_script($jsfn, $j);
 	}
 
 	// This function is placed here below the function that sets-up
