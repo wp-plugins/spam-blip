@@ -1,4 +1,4 @@
-# Spam_BLIP 1.0.0 Pot Source
+# Spam_BLIP 1.0.1 Pot Source
 # Copyright (C) 2013 Ed Hynan
 # This file is distributed under the same license as the Spam_BLIP package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Spam_BLIP 1.0.0\n"
+"Project-Id-Version: Spam_BLIP 1.0.1\n"
 "Report-Msgid-Bugs-To: edhynan@gmail.com\n"
-"POT-Creation-Date: 2013-10-29 20:16-0400\n"
+"POT-Creation-Date: 2013-12-12 15:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,115 +18,115 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Spam_BLIP.php:464
+#: Spam_BLIP.php:470
 msgid "Show verbose introductions:"
 msgstr ""
 
-#: Spam_BLIP.php:469
+#: Spam_BLIP.php:475
 msgid "Blacklist check for comments:"
 msgstr ""
 
-#: Spam_BLIP.php:474
+#: Spam_BLIP.php:480
 msgid "Blacklist check for pings:"
 msgstr ""
 
-#: Spam_BLIP.php:479
+#: Spam_BLIP.php:485
 msgid "Blacklist check user registrations:"
 msgstr ""
 
-#: Spam_BLIP.php:484
+#: Spam_BLIP.php:490
 msgid "Whitelist (pass) TOR exit nodes:"
 msgstr ""
 
-#: Spam_BLIP.php:489
+#: Spam_BLIP.php:495
 msgid "Check existing comment spam:"
 msgstr ""
 
-#: Spam_BLIP.php:494
+#: Spam_BLIP.php:500
 msgid "Check but do <em>not</em> reject:"
 msgstr ""
 
-#: Spam_BLIP.php:503
+#: Spam_BLIP.php:509
 msgid "General Options"
 msgstr ""
 
-#: Spam_BLIP.php:516
+#: Spam_BLIP.php:522
 msgid "Keep data:"
 msgstr ""
 
-#: Spam_BLIP.php:521
+#: Spam_BLIP.php:527
 msgid "Use data:"
 msgstr ""
 
-#: Spam_BLIP.php:527
+#: Spam_BLIP.php:533
 msgid "Data records TTL:"
 msgstr ""
 
-#: Spam_BLIP.php:532
+#: Spam_BLIP.php:538
 msgid "Maximum data records:"
 msgstr ""
 
-#: Spam_BLIP.php:537
+#: Spam_BLIP.php:543
 msgid "Store (and use) non-hit addresses:"
 msgstr ""
 
-#: Spam_BLIP.php:546
+#: Spam_BLIP.php:552
 msgid "Database Options"
 msgstr ""
 
-#: Spam_BLIP.php:554
+#: Spam_BLIP.php:560
 msgid "Use the included widget:"
 msgstr ""
 
-#: Spam_BLIP.php:559
+#: Spam_BLIP.php:565
 msgid "Log bad IP addresses:"
 msgstr ""
 
-#: Spam_BLIP.php:564
+#: Spam_BLIP.php:570
 msgid "Log blacklisted IP addresses:"
 msgstr ""
 
-#: Spam_BLIP.php:569
+#: Spam_BLIP.php:575
 msgid "Bail out on blacklisted IP:"
 msgstr ""
 
-#: Spam_BLIP.php:578
+#: Spam_BLIP.php:584
 msgid "Miscellaneous Options"
 msgstr ""
 
-#: Spam_BLIP.php:586
+#: Spam_BLIP.php:592
 msgid "Active and inactive blacklist domains:"
 msgstr ""
 
-#: Spam_BLIP.php:591
+#: Spam_BLIP.php:597
 msgid "Active and inactive user whitelist:"
 msgstr ""
 
-#: Spam_BLIP.php:596
+#: Spam_BLIP.php:602
 msgid "Active and inactive user blacklist:"
 msgstr ""
 
-#: Spam_BLIP.php:605
+#: Spam_BLIP.php:611
 msgid "Advanced Options"
 msgstr ""
 
-#: Spam_BLIP.php:614
+#: Spam_BLIP.php:620
 msgid "Delete setup options on uninstall:"
 msgstr ""
 
-#: Spam_BLIP.php:619
+#: Spam_BLIP.php:625
 msgid "Delete database table on uninstall:"
 msgstr ""
 
-#: Spam_BLIP.php:628
+#: Spam_BLIP.php:634
 msgid "Plugin Install Settings"
 msgstr ""
 
-#: Spam_BLIP.php:652
+#: Spam_BLIP.php:658
 msgid "Spam BLIP Plugin"
 msgstr ""
 
-#: Spam_BLIP.php:653
+#: Spam_BLIP.php:659
 msgid "Spam BLIP Configuration Settings"
 msgstr ""
 
@@ -134,20 +134,20 @@ msgstr ""
 #. capability = 'manage_options'
 #. callback ''
 #. 'hook_suffix' callback array
-#: Spam_BLIP.php:659
+#: Spam_BLIP.php:665
 msgid "<em>Spam BLIP</em> Plugin Settings"
 msgstr ""
 
-#: Spam_BLIP.php:660
+#: Spam_BLIP.php:666
 msgid "Options controlling <em>Spam BLIP</em> functions."
 msgstr ""
 
-#: Spam_BLIP.php:661 Spam_BLIP.php:722
+#: Spam_BLIP.php:667 Spam_BLIP.php:728
 msgid "Save Settings"
 msgstr ""
 
 #. checkbox id will 'verbose_show-hide'
-#: Spam_BLIP.php:674
+#: Spam_BLIP.php:680
 msgid "Section introductions"
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 #. The quoted string "Screen Options" should match an
 #. interface label from the WP core, so if possible
 #. use the WP core translation for that (likewise "Help").
-#: Spam_BLIP.php:702
+#: Spam_BLIP.php:708
 #, possible-php-format
 msgid ""
 "<p>The sections of this page each have an\n"
@@ -180,12 +180,12 @@ msgid ""
 "\t\t\t</p>"
 msgstr ""
 
-#: Spam_BLIP.php:721 Spam_BLIP.php:2171
+#: Spam_BLIP.php:727 Spam_BLIP.php:2184
 msgid "Show verbose introductions"
 msgstr ""
 
 #. TRANSLATORS: all '%s' are labels of checkbox options
-#: Spam_BLIP.php:726
+#: Spam_BLIP.php:732
 #, possible-php-format
 msgid ""
 "<p>Although the default settings\n"
@@ -224,99 +224,101 @@ msgid ""
 "\t\t\t</p>"
 msgstr ""
 
-#: Spam_BLIP.php:760 Spam_BLIP.php:2192
+#: Spam_BLIP.php:766 Spam_BLIP.php:2215
 msgid "Check blacklist for user registration"
 msgstr ""
 
-#: Spam_BLIP.php:761 Spam_BLIP.php:2199
+#: Spam_BLIP.php:767 Spam_BLIP.php:2222
 msgid "Whitelist TOR addresses"
 msgstr ""
 
-#: Spam_BLIP.php:762 Spam_BLIP.php:2365
+#: Spam_BLIP.php:768 Spam_BLIP.php:2388
 msgid "Log blacklist hits"
 msgstr ""
 
-#: Spam_BLIP.php:763 Spam_BLIP.php:2372
+#: Spam_BLIP.php:769 Spam_BLIP.php:2395
 msgid "Bail (wp_die()) on blacklist hits"
 msgstr ""
 
-#: Spam_BLIP.php:771
+#: Spam_BLIP.php:777
 #, possible-php-format
 msgid ""
 "<p><strong>%s</strong></p><p>\n"
-"\t\t\tTips and explanations can be found on the\n"
+"\t\t\tMore information can be found on the\n"
 "\t\t\t<a href=\"%s\" target=\"_blank\">web page</a>.\n"
+"\t\t\tPlease submit feedback or questions as comments\n"
+"\t\t\ton that page.\n"
 "\t\t\t</p>"
 msgstr ""
 
-#: Spam_BLIP.php:775
+#: Spam_BLIP.php:783
 msgid "For more information:"
 msgstr ""
 
-#: Spam_BLIP.php:790 Spam_BLIP.php:810
+#: Spam_BLIP.php:798 Spam_BLIP.php:818
 msgid "Overview"
 msgstr ""
 
-#: Spam_BLIP.php:798 Spam_BLIP.php:811
+#: Spam_BLIP.php:806 Spam_BLIP.php:819
 msgid "Tips"
 msgstr ""
 
-#: Spam_BLIP.php:915
+#: Spam_BLIP.php:923
 msgid "Settings"
 msgstr ""
 
-#: Spam_BLIP.php:1437
+#: Spam_BLIP.php:1438
 #, possible-php-format
 msgid "bad TTL option: \"%s\""
 msgstr ""
 
-#: Spam_BLIP.php:1470
+#: Spam_BLIP.php:1471
 #, possible-php-format
 msgid "bad maximum: \"%s\""
 msgstr ""
 
-#: Spam_BLIP.php:1488
+#: Spam_BLIP.php:1489
 msgid "whitelist"
 msgstr ""
 
-#: Spam_BLIP.php:1489
+#: Spam_BLIP.php:1490
 msgid "blacklist"
 msgstr ""
 
 #. TRANSLATORS: %1$s is either
 #. 'whitelist' or 'blacklist', and
 #. %2$s is an IP4 dotted quad address
-#: Spam_BLIP.php:1503
+#: Spam_BLIP.php:1504
 #, possible-php-format
 msgid "bad user %1$s address set: \"%2$s\""
 msgstr ""
 
 #. record error for WP
-#: Spam_BLIP.php:1555
+#: Spam_BLIP.php:1556
 #, possible-php-format
 msgid "bad blacklist domain set: \"%s\""
 msgstr ""
 
-#: Spam_BLIP.php:1668
+#: Spam_BLIP.php:1673
 #, possible-php-format
 msgid "%u setting updated successfully"
 msgid_plural "%u settings updated successfully"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:1671
+#: Spam_BLIP.php:1676
 #, possible-php-format
 msgid "One (%d) setting updated"
 msgid_plural "Some settings (%d) updated"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:1696 Spam_BLIP.php:1803 Spam_BLIP.php:1900
-#: Spam_BLIP.php:1985 Spam_BLIP.php:2075
+#: Spam_BLIP.php:1709 Spam_BLIP.php:1816 Spam_BLIP.php:1913
+#: Spam_BLIP.php:1998 Spam_BLIP.php:2088
 msgid "Introduction:"
 msgstr ""
 
-#: Spam_BLIP.php:1699
+#: Spam_BLIP.php:1712
 msgid ""
 "The \"Show verbose introductions\"\n"
 "\t\t\toption selects whether\n"
@@ -328,7 +330,7 @@ msgid ""
 "\t\t\tselected."
 msgstr ""
 
-#: Spam_BLIP.php:1709
+#: Spam_BLIP.php:1722
 msgid ""
 "The \"Blacklist check for comments\" option \n"
 "\t\t\tenables the main functionality of the plugin. When\n"
@@ -340,14 +342,14 @@ msgid ""
 "\t\t\tclosed."
 msgstr ""
 
-#: Spam_BLIP.php:1719
+#: Spam_BLIP.php:1732
 msgid ""
 "The \"Blacklist check for pings\" option \n"
 "\t\t\tis similar to \"Blacklist check for comments\",\n"
 "\t\t\tbut for pings."
 msgstr ""
 
-#: Spam_BLIP.php:1724
+#: Spam_BLIP.php:1737
 msgid ""
 "The \"Blacklist check user registrations\"\n"
 "\t\t\toption enables the blacklist checks before the\n"
@@ -360,7 +362,7 @@ msgid ""
 "\t\t\tdefault."
 msgstr ""
 
-#: Spam_BLIP.php:1735
+#: Spam_BLIP.php:1748
 msgid ""
 "The \"Whitelist TOR exit nodes\" option \n"
 "\t\t\tenables a special lookup to try to determine if the\n"
@@ -380,7 +382,7 @@ msgid ""
 "\t\t\tdefense."
 msgstr ""
 
-#: Spam_BLIP.php:1753
+#: Spam_BLIP.php:1766
 msgid ""
 "With \"Check existing comment spam\"\n"
 "\t\t\tenabled connecting addresses are checked against\n"
@@ -394,7 +396,7 @@ msgid ""
 "\t\t\tThe default is true."
 msgstr ""
 
-#: Spam_BLIP.php:1765
+#: Spam_BLIP.php:1778
 msgid ""
 "With \"Check but do <em>not</em> reject\"\n"
 "\t\t\tenabled all checks are performed, but hits are not\n"
@@ -404,19 +406,19 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:1780 Spam_BLIP.php:1885 Spam_BLIP.php:1970
-#: Spam_BLIP.php:2059 Spam_BLIP.php:2103
+#: Spam_BLIP.php:1793 Spam_BLIP.php:1898 Spam_BLIP.php:1983
+#: Spam_BLIP.php:2072 Spam_BLIP.php:2116
 msgid "Go forward to save button."
 msgstr ""
 
-#: Spam_BLIP.php:1789
+#: Spam_BLIP.php:1802
 #, possible-php-format
 msgid "(There is %u record in the database)"
 msgid_plural "(There are %u records in the database)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:1811
+#: Spam_BLIP.php:1824
 msgid ""
 "These options enable, disable or configure\n"
 "\t\t\tthe storage of blacklist lookup results in the\n"
@@ -424,7 +426,7 @@ msgid ""
 "\t\t\tstored data before DNS lookup."
 msgstr ""
 
-#: Spam_BLIP.php:1817
+#: Spam_BLIP.php:1830
 msgid ""
 "The \"Keep data\" option enables recording of\n"
 "\t\t\thit data such as the connecting IP address, and the times\n"
@@ -433,7 +435,7 @@ msgid ""
 "\t\t\tenabled.)"
 msgstr ""
 
-#: Spam_BLIP.php:1824
+#: Spam_BLIP.php:1837
 msgid ""
 "The \"Use data\" option enables a check in the\n"
 "\t\t\tstored data; if a hit is found there then the\n"
@@ -441,7 +443,7 @@ msgid ""
 msgstr ""
 
 #. if ( self::userecdata_enable )
-#: Spam_BLIP.php:1829
+#: Spam_BLIP.php:1842
 msgid ""
 "These options configure\n"
 "\t\t\tthe storage of blacklist lookup results in a table\n"
@@ -450,7 +452,7 @@ msgid ""
 msgstr ""
 
 #. if ( self::userecdata_enable )
-#: Spam_BLIP.php:1836
+#: Spam_BLIP.php:1849
 msgid ""
 "\"Data records TTL\" sets an expiration time for\n"
 "\t\t\trecords in the database. The records should not be kept\n"
@@ -470,7 +472,7 @@ msgid ""
 "\t\t\tperformed, expired records are removed."
 msgstr ""
 
-#: Spam_BLIP.php:1854
+#: Spam_BLIP.php:1867
 msgid ""
 "The \"Maximum data records\" option limits how\n"
 "\t\t\tmany records will be kept in the database. It is likely that\n"
@@ -481,7 +483,7 @@ msgid ""
 "\t\t\tvalue might be warranted."
 msgstr ""
 
-#: Spam_BLIP.php:1863
+#: Spam_BLIP.php:1876
 msgid ""
 "The \"Store (and use) non-hit addresses\"\n"
 "\t\t\toption will cause commenter addresses to be stored even\n"
@@ -498,12 +500,12 @@ msgid ""
 "\t\t\tThe default is false."
 msgstr ""
 
-#: Spam_BLIP.php:1887 Spam_BLIP.php:1972 Spam_BLIP.php:2061
-#: Spam_BLIP.php:2105
+#: Spam_BLIP.php:1900 Spam_BLIP.php:1985 Spam_BLIP.php:2074
+#: Spam_BLIP.php:2118
 msgid "Go back to top (General section)."
 msgstr ""
 
-#: Spam_BLIP.php:1903
+#: Spam_BLIP.php:1916
 msgid ""
 "The \"Use the included widget\" option controls\n"
 "\t\t\twhether the multi-widget included with the plugin is\n"
@@ -518,7 +520,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:1916
+#: Spam_BLIP.php:1929
 msgid ""
 "The \"Log bad IP addresses\" option enables\n"
 "\t\t\tlog messages when\n"
@@ -546,7 +548,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:1942
+#: Spam_BLIP.php:1955
 msgid ""
 "\"Log blacklisted IP addresses\" selects logging\n"
 "\t\t\tof blacklist hits with the remote IP address. This\n"
@@ -556,7 +558,7 @@ msgid ""
 "\t\t\thas had."
 msgstr ""
 
-#: Spam_BLIP.php:1950
+#: Spam_BLIP.php:1963
 msgid ""
 "The \"Bail out on blacklisted IP\"\n"
 "\t\t\toption will have the plugin terminate the blog output\n"
@@ -571,7 +573,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:1988
+#: Spam_BLIP.php:2001
 msgid ""
 "The \"Active and inactive blacklist domains\"\n"
 "\t\t\ttext fields can be used to edit the DNS blacklist domains\n"
@@ -589,7 +591,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:2004
+#: Spam_BLIP.php:2017
 msgid ""
 "Each \"Active and inactive blacklist domains\"\n"
 "\t\t\tentry line consists of three parts separated by a '@'\n"
@@ -629,7 +631,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:2042
+#: Spam_BLIP.php:2055
 msgid ""
 "The \"Active and inactive user whitelist\"\n"
 "\t\t\tand \"Active and inactive user blacklist\"\n"
@@ -641,7 +643,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:2078
+#: Spam_BLIP.php:2091
 msgid ""
 "This section includes optional\n"
 "\t\t\tfeatures for plugin install or uninstall. Currently,\n"
@@ -655,7 +657,7 @@ msgid ""
 "\t\t\tthese data might be a good idea."
 msgstr ""
 
-#: Spam_BLIP.php:2090
+#: Spam_BLIP.php:2103
 msgid ""
 "The \"Delete setup options\" option and the\n"
 "\t\t\t\"Delete database table\" option are independent;\n"
@@ -663,110 +665,110 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: Spam_BLIP.php:2178
+#: Spam_BLIP.php:2201
 msgid "Check blacklist for comments"
 msgstr ""
 
-#: Spam_BLIP.php:2185
+#: Spam_BLIP.php:2208
 msgid "Check blacklist for pings"
 msgstr ""
 
-#: Spam_BLIP.php:2206
+#: Spam_BLIP.php:2229
 msgid "Store non-hit addresses for repeats"
 msgstr ""
 
-#: Spam_BLIP.php:2213
+#: Spam_BLIP.php:2236
 msgid "Check address in existing comments"
 msgstr ""
 
-#: Spam_BLIP.php:2220
+#: Spam_BLIP.php:2243
 msgid "Pass (do not reject) hits"
 msgstr ""
 
-#: Spam_BLIP.php:2227
+#: Spam_BLIP.php:2250
 msgid "Store blacklist lookup results"
 msgstr ""
 
-#: Spam_BLIP.php:2234
+#: Spam_BLIP.php:2257
 msgid "Use stored blacklist lookup results"
 msgstr ""
 
-#: Spam_BLIP.php:2241
+#: Spam_BLIP.php:2264
 msgid "Set \"Time To Live\" of database records"
 msgstr ""
 
-#: Spam_BLIP.php:2245
+#: Spam_BLIP.php:2268
 #, possible-php-format
 msgid "One (1) hour, %s seconds"
 msgstr ""
 
-#: Spam_BLIP.php:2247
+#: Spam_BLIP.php:2270
 #, possible-php-format
 msgid "Six (6) hours, %s seconds"
 msgstr ""
 
-#: Spam_BLIP.php:2249
+#: Spam_BLIP.php:2272
 #, possible-php-format
 msgid "Twelve (12) hours, %s seconds"
 msgstr ""
 
-#: Spam_BLIP.php:2251
+#: Spam_BLIP.php:2274
 #, possible-php-format
 msgid "One (1) day, %s seconds"
 msgstr ""
 
-#: Spam_BLIP.php:2253
+#: Spam_BLIP.php:2276
 #, possible-php-format
 msgid "One (1) week, %s seconds"
 msgstr ""
 
-#: Spam_BLIP.php:2255
+#: Spam_BLIP.php:2278
 msgid "Set a value in seconds:"
 msgstr ""
 
-#: Spam_BLIP.php:2300
+#: Spam_BLIP.php:2323
 msgid "Set number of database records to keep"
 msgstr ""
 
-#: Spam_BLIP.php:2304
+#: Spam_BLIP.php:2327
 msgid "Ten (10)"
 msgstr ""
 
-#: Spam_BLIP.php:2305
+#: Spam_BLIP.php:2328
 msgid "Fifty (50)"
 msgstr ""
 
-#: Spam_BLIP.php:2306
+#: Spam_BLIP.php:2329
 msgid "One hundred (100)"
 msgstr ""
 
-#: Spam_BLIP.php:2307
+#: Spam_BLIP.php:2330
 msgid "Five hundred (500)"
 msgstr ""
 
-#: Spam_BLIP.php:2308
+#: Spam_BLIP.php:2331
 msgid "One thousand (1000)"
 msgstr ""
 
-#: Spam_BLIP.php:2309
+#: Spam_BLIP.php:2332
 msgid "Set a value:"
 msgstr ""
 
-#: Spam_BLIP.php:2351
+#: Spam_BLIP.php:2374
 msgid "Enable the included widget"
 msgstr ""
 
-#: Spam_BLIP.php:2358
+#: Spam_BLIP.php:2381
 msgid "Log bad addresses in \"REMOTE_ADDR\""
 msgstr ""
 
 #. TRANSLATORS: these are labels above textarea elements
 #. do not use html entities
-#: Spam_BLIP.php:2414
+#: Spam_BLIP.php:2445
 msgid "Active User Whitelist:"
 msgstr ""
 
-#: Spam_BLIP.php:2415
+#: Spam_BLIP.php:2446
 msgid "Inactive User Whitelist:"
 msgstr ""
 
@@ -774,31 +776,31 @@ msgstr ""
 #. effect is to move a line of text from one to the other;
 #. '<<' and '>>' should suggest movement left and right
 #. do not use html entities
-#: Spam_BLIP.php:2426 Spam_BLIP.php:2490
+#: Spam_BLIP.php:2457 Spam_BLIP.php:2529
 msgid "Move address right >>"
 msgstr ""
 
-#: Spam_BLIP.php:2427 Spam_BLIP.php:2491
+#: Spam_BLIP.php:2458 Spam_BLIP.php:2530
 msgid "<< Move address left"
 msgstr ""
 
 #. TRANSLATORS: these are labels above textarea elements
 #. do not use html entities
-#: Spam_BLIP.php:2478
+#: Spam_BLIP.php:2517
 msgid "Active User Blacklist:"
 msgstr ""
 
-#: Spam_BLIP.php:2479
+#: Spam_BLIP.php:2518
 msgid "Inactive User Blacklist:"
 msgstr ""
 
 #. TRANSLATORS: these are labels above textarea elements
 #. do not use html entities
-#: Spam_BLIP.php:2551
+#: Spam_BLIP.php:2598
 msgid "Active DNS Blacklists:"
 msgstr ""
 
-#: Spam_BLIP.php:2552
+#: Spam_BLIP.php:2599
 msgid "Inactive DNS Blacklists:"
 msgstr ""
 
@@ -806,72 +808,72 @@ msgstr ""
 #. effect is to move a line of text from one to the other;
 #. '<<' and '>>' should suggest movement left and right
 #. do not use html entities
-#: Spam_BLIP.php:2563
+#: Spam_BLIP.php:2610
 msgid "Move line right >>"
 msgstr ""
 
-#: Spam_BLIP.php:2564
+#: Spam_BLIP.php:2611
 msgid "<< Move line left"
 msgstr ""
 
-#: Spam_BLIP.php:2580
+#: Spam_BLIP.php:2627
 msgid "Permanently delete plugin settings"
 msgstr ""
 
-#: Spam_BLIP.php:2587
+#: Spam_BLIP.php:2634
 msgid "Permanently delete database table (stored data)"
 msgstr ""
 
-#: Spam_BLIP.php:2739
+#: Spam_BLIP.php:2791
 msgid "cannot allocate BL check object"
 msgstr ""
 
 #. TRANSLATORS: polite rejection message
 #. in response to blacklisted IP address
 #. TODO: make message text an option
-#: Spam_BLIP.php:2859 Spam_BLIP.php:2916 Spam_BLIP.php:2954
-#: Spam_BLIP.php:3546
+#: Spam_BLIP.php:2911 Spam_BLIP.php:2968 Spam_BLIP.php:3006
+#: Spam_BLIP.php:3598
 msgid "Sorry, but no, thank you."
 msgstr ""
 
-#: Spam_BLIP.php:3082
+#: Spam_BLIP.php:3134
 #, possible-php-format
 msgid ""
 "Got IP version 6 address \"%s\"; sorry, only IP4 handled currently"
 msgstr ""
 
-#: Spam_BLIP.php:3084
+#: Spam_BLIP.php:3136
 #, possible-php-format
 msgid "Invalid remote address; \"REMOTE_ADDR\" contains \"%s\""
 msgstr ""
 
 #. TRANSLATORS: word for ietf/iana reserved network
-#: Spam_BLIP.php:3110
+#: Spam_BLIP.php:3162
 msgid "RESERVED"
 msgstr ""
 
 #. TRANSLATORS: word for ietf/iana loopback network
-#: Spam_BLIP.php:3112
+#: Spam_BLIP.php:3164
 msgid "LOOPBACK"
 msgstr ""
 
 #. TRANSLATORS: %1$s is either "RESERVED" or "LOOPBACK";
 #. see comments above.
 #. %2$s is an IPv4 dotted quad address
-#: Spam_BLIP.php:3117
+#: Spam_BLIP.php:3169
 #, possible-php-format
 msgid "Got %1$s IPv4 address \"%2$s\" in \"REMOTE_ADDR\"."
 msgstr ""
 
 #. TRANSLATORS: see "TRANSLATORS: %1$s is type..."
-#: Spam_BLIP.php:3221 Spam_BLIP.php:3272 Spam_BLIP.php:3313
-#: Spam_BLIP.php:3367
+#: Spam_BLIP.php:3273 Spam_BLIP.php:3324 Spam_BLIP.php:3365
+#: Spam_BLIP.php:3419
 msgid "pings"
 msgstr ""
 
 #. TRANSLATORS: see "TRANSLATORS: %1$s is type..."
-#: Spam_BLIP.php:3223 Spam_BLIP.php:3274 Spam_BLIP.php:3315
-#: Spam_BLIP.php:3369
+#: Spam_BLIP.php:3275 Spam_BLIP.php:3326 Spam_BLIP.php:3367
+#: Spam_BLIP.php:3421
 msgid "comments"
 msgstr ""
 
@@ -880,7 +882,7 @@ msgstr ""
 #. %3$s is DNS blacklist lookup domain
 #. %4$s is IP4 blacklist lookup result
 #. %5$f is lookup time in seconds (float)
-#: Spam_BLIP.php:3236
+#: Spam_BLIP.php:3288
 #, possible-php-format
 msgid ""
 "%1$s denied for address %2$s, list at \"%3$s\", result %4$s in %5$f"
@@ -889,7 +891,7 @@ msgstr ""
 #. TRANSLATORS: %1$s is type "comments" or "pings"
 #. %2$s is IP4 address dotted quad
 #. %3$f is lookup time in seconds (float)
-#: Spam_BLIP.php:3246
+#: Spam_BLIP.php:3298
 #, possible-php-format
 msgid "%1$s denied for address %2$s in %3$f"
 msgstr ""
@@ -897,7 +899,7 @@ msgstr ""
 #. TRANSLATORS: %1$s is type "comments" or "pings"
 #. %2$s is IP4 address dotted quad
 #. %3$f is is time (float) used in option check
-#: Spam_BLIP.php:3283
+#: Spam_BLIP.php:3335
 #, possible-php-format
 msgid ""
 "%1$s allowed address %2$s, found in user whitelist (lookup time %3$f)"
@@ -906,7 +908,7 @@ msgstr ""
 #. TRANSLATORS: %1$s is type "comments" or "pings"
 #. %2$s is IP4 address dotted quad
 #. %3$f is is time (float) used in option check
-#: Spam_BLIP.php:3324
+#: Spam_BLIP.php:3376
 #, possible-php-format
 msgid ""
 "%1$s denied address %2$s, found in user blacklist (lookup time %3$f)"
@@ -919,7 +921,7 @@ msgstr ""
 #. %4$s is last seen date; as above
 #. %5$u is integer number of times seen (hitcount)
 #. %6$f is is time (float) used in database check
-#: Spam_BLIP.php:3382
+#: Spam_BLIP.php:3434
 #, possible-php-format
 msgid ""
 "%1$s denied for address %2$s, first seen %3$s, last seen %4$s, "
@@ -932,7 +934,7 @@ msgstr[1] ""
 
 #. TRANSLATORS: %1$s is IP4 address; %2$u is the
 #. number of times adress was seen previously
-#: Spam_BLIP.php:3478
+#: Spam_BLIP.php:3530
 #, possible-php-format
 msgid ""
 "Found \"%1$s\" to be a tor exit, %2$u hits in data -- passed per "
@@ -941,148 +943,148 @@ msgstr ""
 
 #. TRANSLATORS: %s is IP4 address; DNS is the
 #. domain name system
-#: Spam_BLIP.php:3518
+#: Spam_BLIP.php:3570
 #, possible-php-format
 msgid "Found \"%s\" to be a tor exit, by DNS -- passed per option"
 msgstr ""
 
 #. Label shown on widgets page
-#: Spam_BLIP.php:4203
+#: Spam_BLIP.php:4255
 msgid "Spam BLIP"
 msgstr ""
 
 #. Description shown under label shown on widgets page
-#: Spam_BLIP.php:4205
+#: Spam_BLIP.php:4257
 msgid ""
 "Display comment and ping spam hit information, and database table row "
 "count"
 msgstr ""
 
-#: Spam_BLIP.php:4277
+#: Spam_BLIP.php:4329
 msgid "Options:"
 msgstr ""
 
-#: Spam_BLIP.php:4283
+#: Spam_BLIP.php:4335
 msgid "Checking for comment spam"
 msgstr ""
 
-#: Spam_BLIP.php:4288
+#: Spam_BLIP.php:4340
 msgid "Checking for ping spam"
 msgstr ""
 
-#: Spam_BLIP.php:4293
+#: Spam_BLIP.php:4345
 msgid "Checking user registration"
 msgstr ""
 
-#: Spam_BLIP.php:4298
+#: Spam_BLIP.php:4350
 msgid "Checking in saved spam"
 msgstr ""
 
-#: Spam_BLIP.php:4303
+#: Spam_BLIP.php:4355
 msgid "Bailing out on hits"
 msgstr ""
 
-#: Spam_BLIP.php:4308
+#: Spam_BLIP.php:4360
 msgid "Saving non-hits"
 msgstr ""
 
-#: Spam_BLIP.php:4313
+#: Spam_BLIP.php:4365
 msgid "Whitelisting TOR exits"
 msgstr ""
 
-#: Spam_BLIP.php:4318
+#: Spam_BLIP.php:4370
 msgid "Not rejecting hits"
 msgstr ""
 
-#: Spam_BLIP.php:4326
+#: Spam_BLIP.php:4378
 msgid "Records:"
 msgstr ""
 
-#: Spam_BLIP.php:4342
+#: Spam_BLIP.php:4394
 #, possible-php-format
 msgid "%d address listed"
 msgid_plural "%d addresses listed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4349
+#: Spam_BLIP.php:4401
 #, possible-php-format
 msgid "%d user whitelist address"
 msgid_plural "%d user whitelist addresses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4356
+#: Spam_BLIP.php:4408
 #, possible-php-format
 msgid "%d user blacklist address"
 msgid_plural "%d user blacklist addresses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4363
+#: Spam_BLIP.php:4415
 #, possible-php-format
 msgid "%d non-hit address"
 msgid_plural "%d non-hit addresses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4370
+#: Spam_BLIP.php:4422
 #, possible-php-format
 msgid "%d tor exit node"
 msgid_plural "%d tor exit nodes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4377
+#: Spam_BLIP.php:4429
 #, possible-php-format
 msgid "%d address in the past hour"
 msgid_plural "%d addresses in the past hour"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4384
+#: Spam_BLIP.php:4436
 #, possible-php-format
 msgid "%d new address in the past hour"
 msgid_plural "%d new addresses in the past hour"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4391
+#: Spam_BLIP.php:4443
 #, possible-php-format
 msgid "%d address in the past day"
 msgid_plural "%d addresses in the past day"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4398
+#: Spam_BLIP.php:4450
 #, possible-php-format
 msgid "%d new address in the past day"
 msgid_plural "%d new addresses in the past day"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4405
+#: Spam_BLIP.php:4457
 #, possible-php-format
 msgid "%d address in the past week"
 msgid_plural "%d addresses in the past week"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4412
+#: Spam_BLIP.php:4464
 #, possible-php-format
 msgid "%d new address in the past week"
 msgid_plural "%d new addresses in the past week"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4419
+#: Spam_BLIP.php:4471
 #, possible-php-format
 msgid "%d hit in all records"
 msgid_plural "total of %d hits in all records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Spam_BLIP.php:4432
+#: Spam_BLIP.php:4484
 #, possible-php-format
 msgid ""
 "<br><p>\n"
@@ -1092,14 +1094,14 @@ msgid ""
 "\t\t\t\t</p>"
 msgstr ""
 
-#: Spam_BLIP.php:4499
+#: Spam_BLIP.php:4551
 msgid "Widget title:"
 msgstr ""
 
-#: Spam_BLIP.php:4512
+#: Spam_BLIP.php:4564
 msgid "Caption:"
 msgstr ""
 
-#: Spam_BLIP.php:4525
+#: Spam_BLIP.php:4577
 msgid "Show <em>Spam BLIP</em> URL:&nbsp;"
 msgstr ""

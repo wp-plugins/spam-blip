@@ -1,10 +1,10 @@
 === Spam_BLIP ===
 Contributors: EdHynan
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick%DONATE_LINK%hosted_button_id=4Q2Y8ZUG8HXLC
-Tags: anti-spam, blog, comment, comments, content, links, network, plugin, post, Post, posts, security, spam, wordpress
+Tags: anti-spam, comment spam, spam comments, blog spam, blog, comment, comments, content, links, network, plugin, post, Post, posts, security, spam, wordpress
 Requires at least: 3.0.2
-Tested up to: 3.7
-Stable tag: 1.0.0.2
+Tested up to: 3.8
+Stable tag: 1.0.1
 Text Domain: spambl_l10n
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -52,9 +52,9 @@ not yet falling over yourself to get it installed:
 
 *	Spam BLIP comes configured with blacklist domains that have
 	worked well during development, so a user should not need to
-	be concerned with the blacklists. But, there is an advanced
+	be concerned with the blacklists, but there is an advanced
 	option to add or delete, activate or disable (yet save)
-	list domains; and configure the interpretation of a return
+	list domains, and configure the interpretation of a return
 	from a successful lookup.
 
 *	Spam BLIP provides user-set whitelist and blacklist options.
@@ -89,7 +89,7 @@ not yet falling over yourself to get it installed:
 	as one that analyzes comment content. (Please report any
 	conflict with other, non-DNS blacklist type spam plugins.
 	Note that Spam BLIP is not expected to work in concert with
-	other DNS-type spam plugins.)
+	other DNS-type anti-spam plugins.)
 
 *	Spam BLIP includes a widget that will show options and records
 	information. The widget might or might not be an enhancement
@@ -134,9 +134,22 @@ Choose any one, they all work.
 
 2. The Spam BLIP settings page TTL and maximum records options.
 
-3. The Spam BLIP DNS blackist domain editor (option).
+3. The Spam BLIP DNS blacklist domain editor option.
 
 == Changelog ==
+
+= 1.0.1 =
+* Small code cleanups.
+* Made the "Screen Options" tab -> "Section Introductions" checkbox
+	value persistent, if the "Save Settings" button is clicked.
+* Style tweaks and size tweaks (admin) in response to WP 3.8 changes.
+* Checked with WP 3.8: OK.
+
+= 1.0.0.2 =
+* No real change: just a correction of an error in the
+	special file headers used for information display
+	in the admin interface and at WordPress.org plugin
+	pages.
 
 = 1.0.0 =
 * Initial release.
