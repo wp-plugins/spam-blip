@@ -3,7 +3,7 @@
 Plugin Name: Spam BLIP
 Plugin URI: http://agalena.nfshost.com/b1/?page_id=211
 Description: Stop comment spam before it is posted.
-Version: 1.0.0.2
+Version: 1.0.1
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -145,6 +145,8 @@ class Spam_BLIP_class {
 	// WP option names/keys
 	// verbose (helpful?) section introductions?
 	const optverbose = 'verbose';
+	// this is hidden in settings page; used w/ JS for 'screen options'
+	const optscreen1 = 'screen_opts_1';
 	// filter comments_open?
 	const optcommflt = 'commflt';
 	// filter pings_open?
@@ -201,6 +203,8 @@ class Spam_BLIP_class {
 
 	// verbose (helpful?) section introductions?
 	const defverbose = 'true';
+	// this is hidden in settings page; used w/ JS for 'screen options'
+	const defscreen1 = 'true';
 	// filter comments_open?
 	const defcommflt = 'true';
 	// filter pingss_open?
@@ -364,6 +368,7 @@ class Spam_BLIP_class {
 		if ( $chkonly === true ) {
 			return array(
 				self::optverbose => self::defverbose,
+				self::optscreen1 => self::defscreen1,
 				self::optcommflt => self::defcommflt,
 				self::optpingflt => self::defpingflt,
 				self::optregiflt => self::defregiflt,
@@ -384,6 +389,7 @@ class Spam_BLIP_class {
 		
 		return array(
 			self::optverbose => self::defverbose,
+			self::optscreen1 => self::defscreen1,
 			self::optcommflt => self::defcommflt,
 			self::optpingflt => self::defpingflt,
 			self::optregiflt => self::defregiflt,
@@ -769,8 +775,10 @@ class Spam_BLIP_class {
 		// from default textdomain (WP core)
 		$tt = self::wt(sprintf(
 			__('<p><strong>%s</strong></p><p>
-			Tips and explanations can be found on the
+			More information can be found on the
 			<a href="%s" target="_blank">web page</a>.
+			Please submit feedback or questions as comments
+			on that page.
 			</p>', 'spambl_l10n'),
 			__('For more information:'),
 			self::plugin_webpage
@@ -950,14 +958,14 @@ class Spam_BLIP_class {
 		self::load_translations();
 		$this->init_opts();
 
-		$pf = self::mk_pluginfile();
 		// admin or public invocation?
 		$adm = is_admin();
 
-		$cl = __CLASS__; // for static methods
+		$cl = __CLASS__; // for static methods callbacks
 
 		if ( $adm ) {
 			// keep it clean: {de,}activation
+			$pf = self::mk_pluginfile();
 			if ( current_user_can('activate_plugins') ) {
 				$aa = array($cl, 'on_deactivate');
 				register_deactivation_hook($pf, $aa);
@@ -977,14 +985,13 @@ class Spam_BLIP_class {
 				$this->init_settings_page();
 			}
 	
-			// this will create/update table as nec. if user set
-			// the option (which defaults to false)
+			// create/update table as nec.
 			if ( self::get_recdata_option() != 'false' ||
 				 self::get_usedata_option() != 'false' ) {
 				$this->db_create_table();
 	
 				// not sufficiently certain about this; we
-				// do our own maintenance anyway
+				// do our own table maintenance anyway
 				if ( false && defined('WP_ALLOW_REPAIR') ) {
 					$aa = array($this, 'filter_tables_to_repair');
 					add_filter('tables_to_repair', $aa, 100);
@@ -997,19 +1004,19 @@ class Spam_BLIP_class {
 			$aa = array($this, 'action_comment_closed');
 			add_action('comment_closed', $aa, 100);
 	
-			// must check more than just our option for this
+			$aa = array($this, 'filter_comments_open');
+			add_filter('comments_open', $aa, 100);
+	
+			$aa = array($this, 'filter_pings_open');
+			add_filter('pings_open', $aa, 100);
+	
+			// optional check on new registrations
 			if ( self::check_filter_user_regi() ) {
 				$aa = array($this, 'filter_user_regi');
 				add_filter('register', $aa, 100);
 				$aa = array($this, 'action_user_regi');
 				add_action('login_form_register', $aa, 100);
 			}
-	
-			$aa = array($this, 'filter_comments_open');
-			add_filter('comments_open', $aa, 100);
-	
-			$aa = array($this, 'filter_pings_open');
-			add_filter('pings_open', $aa, 100);
 		} // if ( $adm )
 
 		// WP does this hook from a php register_shutdown_function()
@@ -1020,9 +1027,6 @@ class Spam_BLIP_class {
 		// setup cron job for e.g, db table maintenance
 		if ( ! wp_next_scheduled('spamblipplugincronact',
 			self::$wp_cron_arg) ) {
-			// set *previous* midnight, *local* time -- there is
-			// something very fragile about the wp cron facility:
-			// tough to get it to actually work
 			$tm = time();
 			wp_schedule_event(
 				$tm, self::maint_intvl, 'spamblipplugincronact',
@@ -1185,9 +1189,6 @@ class Spam_BLIP_class {
 	
 	// 'html-ize' a text string
 	public static function ht($text, $cset = null) {
-		// try to use get_option('blog_charset') only once;
-		// it's not cheap enough even with WP's cache for
-		// the number of times this might be called
 		static $_blog_charset;
 		if ( ! isset($_blog_charset) ) {
 			$_blog_charset = get_option('blog_charset');
@@ -1588,6 +1589,10 @@ class Spam_BLIP_class {
 					if ( self::userecdata_enable !== true ) {
 						$ot = 'true';
 					}
+				// hidden opts for 'screen options' -- boolean
+				case self::optscreen1:
+					$a_out[$k] = ($ot == 'false') ? 'false' : 'true';
+					break;
 				case self::optverbose:
 				case self::optcommflt:
 				case self::optpingflt:
@@ -1689,6 +1694,14 @@ class Spam_BLIP_class {
 		if ( self::get_verbose_option() !== 'true' ) {
 			return;
 		}
+
+		// coopt this proc to put 'screen options' hidden opt:
+		$eid = self::optscreen1 . '_ini';
+		$val = self::get_screen1_option() == 'true' ? "true" : "false";
+
+		printf('<input id="%s" value="%s" type="hidden">%s',
+			$eid, $val, "\n"
+		);
 
 		$did = 'Spam_BLIP_General_Desc';
 		echo '<div id="' . $did . '">';
@@ -2141,18 +2154,18 @@ class Spam_BLIP_class {
 			</tr>
 			<tr>
 				<td align="right">
-					<textarea id="<?php echo $ltxid; ?>" <?php echo $txattl; ?> ><?php echo $txvall; ?></textarea>
+					<textarea id="<?php echo $ltxid; ?>" class="mceEditor" <?php echo $txattl; ?> ><?php echo $txvall; ?></textarea>
 				</td>
 				<td align="left">
-					<textarea id="<?php echo $rtxid; ?>" <?php echo $txattr; ?> ><?php echo $txvalr; ?></textarea>
+					<textarea id="<?php echo $rtxid; ?>" class="mceEditor" <?php echo $txattr; ?> ><?php echo $txvalr; ?></textarea>
 				</td>
 			</tr>
 			<tr>
 				<td align="right">
-					<input type="button" id="<?php echo $lbtid; ?>" value="<?php echo $lbttx; ?>" onclick="false;" />
+					<input type="button" class="button" id="<?php echo $lbtid; ?>" value="<?php echo $lbttx; ?>" onclick="false;" />
 				</td>
 				<td align="left">
-					<input type="button" id="<?php echo $rbtid; ?>" value="<?php echo $rbttx; ?>" onclick="false;" />
+					<input type="button" class="button" id="<?php echo $rbtid; ?>" value="<?php echo $rbttx; ?>" onclick="false;" />
 				</td>
 			</tr>
 		</tbody></table>
@@ -2171,6 +2184,16 @@ class Spam_BLIP_class {
 		$tt = self::wt(__('Show verbose introductions', 'spambl_l10n'));
 		$k = self::optverbose;
 		$this->put_single_checkbox($a, $k, $tt);
+
+		// coopt this proc to put 'screen options' hidden opt:
+		$group = self::opt_group;
+		$eid = self::optscreen1;
+		$enm = "{$group}[{$eid}]";
+		$val = self::get_screen1_option() == 'true' ? "true" : "false";
+
+		printf('<input id="%s" name="%s" value="%s" type="hidden">%s',
+			$eid, $enm, $val, "\n"
+		);
 	}
 
 	// callback, rbl filter comments?
@@ -2395,12 +2418,20 @@ class Spam_BLIP_class {
 		// sigh. ffox is so generous that its textareas are
 		// much larger than others for the same dimension args
 		$mozz = self::is_mozz();
+		// Update: with WP 3.8 RC2 style is changed significantly, and
+		// now text sizes are larger and textareas that were too small
+		// in some (webkit?) browsers are now too large! Yet, FFox
+		// remains about the same.
+		// So, another boolean for that.
+		$wp38 = self::wpv_min((3 << 24) | (8 << 16));
 
 		// atts for textarea
-		$txh = $mozz ? 12 : 12;
-		$txw = $mozz ? 54 : 74;
-		$txatt = sprintf('rows="%u" cols="%u"', $txh, $txw);
-		$txatt .= ' inputmode="verbatim" wrap="off"';
+		$txh = $mozz ? 12 : ($wp38 ? 12 : 12);
+		$txw = $mozz ? 54 : ($wp38 ? 52 : 74);
+		$txatt = sprintf('rows="%u" cols="%u"%s %s', $txh, $txw,
+			$wp38 ? ' style="font-size: 85%;"' : "",
+			'inputmode="verbatim" wrap="off"'
+		);
 	
 		$aargs = array(
 			// textarea element attributes; esp., name
@@ -2459,13 +2490,21 @@ class Spam_BLIP_class {
 		// sigh. ffox is so generous that its textareas are
 		// much larger than others for the same dimension args
 		$mozz = self::is_mozz();
+		// Update: with WP 3.8 RC2 style is changed significantly, and
+		// now text sizes are larger and textareas that were too small
+		// in some (webkit?) browsers are now too large! Yet, FFox
+		// remains about the same.
+		// So, another boolean for that.
+		$wp38 = self::wpv_min((3 << 24) | (8 << 16));
 
 		// atts for textarea
-		$txh = $mozz ? 12 : 12;
-		$txw = $mozz ? 54 : 74;
-		$txatt = sprintf('rows="%u" cols="%u"', $txh, $txw);
-		$txatt .= ' inputmode="verbatim" wrap="off"';
-	
+		$txh = $mozz ? 12 : ($wp38 ? 12 : 12);
+		$txw = $mozz ? 54 : ($wp38 ? 52 : 74);
+		$txatt = sprintf('rows="%u" cols="%u"%s %s', $txh, $txw,
+			$wp38 ? ' style="font-size: 85%;"' : "",
+			'inputmode="verbatim" wrap="off"'
+		);
+
 		$aargs = array(
 			// textarea element attributes; esp., name
 			'txattl' => $txatt . ' placeholder="127.0.0.2" name="' . "{$gr}[{$ol}]" . '"',
@@ -2532,13 +2571,21 @@ class Spam_BLIP_class {
 		// sigh. ffox is so generous that its textareas are
 		// much larger than others for the same dimension args
 		$mozz = self::is_mozz();
+		// Update: with WP 3.8 RC2 style is changed significantly, and
+		// now text sizes are larger and textareas that were too small
+		// in some (webkit?) browsers are now too large! Yet, FFox
+		// remains about the same.
+		// So, another boolean for that.
+		$wp38 = self::wpv_min((3 << 24) | (8 << 16));
 
 		// atts for textarea
-		$txh = $mozz ? 7 : 7;
-		$txw = $mozz ? 54 : 74;
-		$txatt = sprintf('rows="%u" cols="%u"', $txh, $txw);
-		$txatt .= ' inputmode="verbatim" wrap="off"';
-	
+		$txh = $mozz ? 7 : ($wp38 ? 9 : 7);
+		$txw = $mozz ? 54 : ($wp38 ? 52 : 74);
+		$txatt = sprintf('rows="%u" cols="%u"%s %s', $txh, $txw,
+			$wp38 ? ' style="font-size: 85%;"' : "",
+			'inputmode="verbatim" wrap="off"'
+		);
+
 		$aargs = array(
 			// textarea element attributes; esp., name
 			'txattl' => $txatt . ' placeholder="wanted.bl.example.net@127.0.0.2@0,=" name="' . "{$gr}[{$ol}]" . '"',
@@ -2610,6 +2657,11 @@ class Spam_BLIP_class {
 	// for settings section introductions
 	public static function get_verbose_option() {
 		return self::opt_by_name(self::optverbose);
+	}
+
+	// for settings section 'screen options'; hidden input value
+	public static function get_screen1_option() {
+		return self::opt_by_name(self::optscreen1);
 	}
 
 	// for whether to use widget
