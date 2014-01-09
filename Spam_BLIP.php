@@ -3,7 +3,7 @@
 Plugin Name: Spam BLIP
 Plugin URI: http://agalena.nfshost.com/b1/?page_id=211
 Description: Stop comment spam before it is posted.
-Version: 1.0.1
+Version: 1.0.2
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -75,6 +75,7 @@ Spam_BLIP_plugin_paranoid_require_class('OptSection_0_0_2b');
 Spam_BLIP_plugin_paranoid_require_class('OptPage_0_0_2b');
 Spam_BLIP_plugin_paranoid_require_class('Options_0_0_2b');
 Spam_BLIP_plugin_paranoid_require_class('ChkBL_0_0_1');
+Spam_BLIP_plugin_paranoid_require_class('NetMisc_0_0_1');
 
 /**********************************************************************\
  *  misc. functions                                                   *
@@ -229,9 +230,9 @@ class Spam_BLIP_class {
 	// use rbl hit data?
 	const defusedata = 'true';
 	// rbl hit data ttl
-	const defttldata = '86400'; // 1 day, seconds
+	const defttldata = '1209600'; // 2 weeks in seconds
 	// rbl maximum data records
-	const defmaxdata = '50';
+	const defmaxdata = '200';
 	// optplugwdg -- use plugin's widget
 	const defplugwdg = 'false';  // plugin widget
 	// log (and possibly mail notice) resv. IPs in REMOTE_ADDR?
@@ -345,9 +346,7 @@ class Spam_BLIP_class {
 				array($cl, 'plugin_page_addlink'));
 		}
 
-		// some things are to be done in init hook: add
-		// hooks for shortcode and widget, and optionally
-		// posts processing to scan attachments, etc...
+		// some things are to be done in init hook
 		add_action('init', array($this, 'init_hook_func'));
 
 		// it's not enough to add this action in the activation hook;
@@ -593,16 +592,16 @@ class Spam_BLIP_class {
 				self::opteditrbl,
 				$items[self::opteditrbl],
 				array($this, 'put_editrbl_opt'));
-		$fields[$nf++] = new $Cf(self::opteditwhl,
-				self::wt(__('Active and inactive user whitelist:', 'spambl_l10n')),
-				self::opteditwhl,
-				$items[self::opteditwhl],
-				array($this, 'put_editwhl_opt'));
 		$fields[$nf++] = new $Cf(self::opteditbll,
 				self::wt(__('Active and inactive user blacklist:', 'spambl_l10n')),
 				self::opteditbll,
 				$items[self::opteditbll],
 				array($this, 'put_editbll_opt'));
+		$fields[$nf++] = new $Cf(self::opteditwhl,
+				self::wt(__('Active and inactive user whitelist:', 'spambl_l10n')),
+				self::opteditwhl,
+				$items[self::opteditwhl],
+				array($this, 'put_editwhl_opt'));
 
 		// advanced
 		$sections[$ns++] = new $Cs($fields,
@@ -1417,15 +1416,17 @@ class Spam_BLIP_class {
 					break;
 				case self::optttldata:
 					switch ( $ot ) {
-						case ''.(3600):       //'One (1) hour'
-						case ''.(3600*6):     //'Six (6) hours'
-						case ''.(3600*12):    //'Twelve (12) hours'
-						case ''.(3600*24):    //'One (1) day'
-						case ''.(3600*24*7):  //'One (1) week'
+						case ''.(3600):       	//'One hour'
+						case ''.(3600*6):     	//'Six hours'
+						case ''.(3600*12):    	//'Twelve hours'
+						case ''.(3600*24):    	//'One day'
+						case ''.(3600*24*7):  	//'One week'
+						case ''.(3600*24*7*2):	//'Two weeks'
+						case ''.(3600*24*7*4):	//'Four weeks'
 							$a_out[$k] = $ot;
 							$nupd += ($ot === $oo) ? 0 : 1;
 							break;
-						default:               //'Set a value:'
+						default:               	//'Set a value:'
 							$ot = trim($opts[self::optttldata.'_text']);
 							// 9 decimal digits > 30 years in secs
 							$re = '/^[+-]?[0-9]{1,9}$/';
@@ -1453,6 +1454,7 @@ class Spam_BLIP_class {
 						case '10':
 						case '50':
 						case '100':
+						case '200':
 						case '500':
 						case '1000':
 							$a_out[$k] = $ot;
@@ -1497,6 +1499,37 @@ class Spam_BLIP_class {
 						}
 						$chk = filter_var(
 							$l, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+						if ( $chk === false ) {
+							// New v. 1.0.2: entry may be
+							// addr/netmask[/netmask], 2nd mask
+							// optional so that one may be CIDR and
+							// the other traditional, order unimportant.
+							// Of course in this usage addr is meant
+							// as a network rather than host. In
+							// principle net number needn't be a full
+							// dotted quad -- enough for the netmask
+							// is needed -- but code will be simpler
+							// and less error-prone by requiring a
+							// full proper quad.
+							$nma = explode('/', $l);
+							$chk = NetMisc_0_0_1::ip4_dots2int($nma[0]);
+							if ( $chk !== false ) {
+								$chk = NetMisc_0_0_1::netaddr_norm($l,
+									$nma, true);
+							}
+							if ( $chk !== false ) {
+								// netaddr_norm() places CIDR in [1]
+								if ( (int)$nma[1] === 32 ) {
+									// mask of 32 implies host, not net
+									$l = $nma[0];
+								} else {
+									// returns clean net/CIDR/maskquad
+									$l = $chk;
+								}
+								// non-false return was not truly true
+								$chk = true;
+							}
+						}
 						if ( $chk === false ) {
 							// TRANSLATORS: %1$s is either
 							// 'whitelist' or 'blacklist', and
@@ -1799,8 +1832,8 @@ class Spam_BLIP_class {
 		$cnt = $this->db_get_rowcount();
 		if ( $cnt ) {
 			$t = self::wt(
-				_n('(There is %u record in the database)',
-				   '(There are %u records in the database)',
+				_n('(There is %u record in the database table)',
+				   '(There are %u records in the database table)',
 				   $cnt, 'spambl_l10n')
 			);
 			printf('<p>%s</p>%s', sprintf($t, $cnt), "\n");
@@ -1868,9 +1901,11 @@ class Spam_BLIP_class {
 			many records will be kept in the database. It is likely that
 			as the data grow larger, the oldest records will no
 			longer be needed. Records are judged old based on
-			the time last seen. Use your judgement with this:
-			if you always get large amounts of spam, a larger
-			value might be warranted.', 'spambl_l10n'));
+			the time an address was last seen. Use your judgement with
+			this: if you always get large amounts of spam, a larger
+			value might be warranted. The number of records may grow
+			larger than this setting by a small calculated amount before
+			being trimmed back to the number set here', 'spambl_l10n'));
 		printf('<p>%s</p>%s', $t, "\n");
 
 		$t = self::wt(__('The "Store (and use) non-hit addresses"
@@ -2052,13 +2087,42 @@ class Spam_BLIP_class {
 			', 'spambl_l10n'));
 		printf('<p>%s</p>%s', $t, "\n");
 
-		$t = self::wt(__('The "Active and inactive user whitelist"
-			and "Active and inactive user blacklist"
+		$t = self::wt(__('The "Active and inactive user blacklist"
+			and "Active and inactive user whitelist"
 			text fields can be used to add addresses that will
-			always be allowed, or always denied, respectively.
+			always be denied, or always allowed, respectively.
 			Like the blacklist domains fields, only those in the
 			left side "active" text areas are used, and addresses in
 			the right side "inactive" areas are not used, but stored.
+			</p><p>
+			The black and white lists also accept whole subnetworks.
+			This might be very useful if, for example, it seems that
+			spammers are using or abusing a whole subnet, or if you
+			need to allow an organization network even if some of its
+			addresses appear in the DNS blacklists. Specify a subnet
+			as "<code>N.N.N.N/(CIDR or N.N.N.N)</code>"
+			where the network number appears
+			to the left of the slash and the network mask appears
+			to the right of the slash. The network mask may be given
+			in CIDR notation (number of bits) or the traditional
+			dotted quad form. When the settings are submitted, these
+			arguments are normalized so that
+			"<code>N.N.N.N/CIDR/N.N.N.N</code>"
+			will appear. You may specify both CIDR and dotted quad
+			network masks, separated by an additional slash, if you are
+			not sure which is correct, and compare the result after
+			submitting the settings.
+			</p><p>
+			You should be thoughtful when
+			specifying a subnetwork and its mask because errors will
+			affect numerous addresses. Enable
+			"Log blacklisted IP addresses" in the
+			"Miscellaneous Options" section and then check your site
+			error log to see if multiple hits seem to be coming from
+			the same subnet, and check the <em>WHOIS</em> service
+			to get an idea of what the network and mask should be.
+			If you really understand what you are doing you may
+			of course decide values on your judgement.
 			', 'spambl_l10n'));
 		printf('<p>%s</p>%s', $t, "\n");
 
@@ -2265,22 +2329,26 @@ class Spam_BLIP_class {
 		$k = self::optttldata;
 		$group = self::opt_group;
 		$va = array(
-			array(__('One (1) hour, %s seconds', 'spambl_l10n'),
+			array(__('One hour, %s seconds', 'spambl_l10n'),
 				''.(3600)),
-			array(__('Six (6) hours, %s seconds', 'spambl_l10n'),
+			array(__('Six hours, %s seconds', 'spambl_l10n'),
 				''.(3600*6)),
-			array(__('Twelve (12) hours, %s seconds', 'spambl_l10n'),
+			array(__('Twelve hours, %s seconds', 'spambl_l10n'),
 				''.(3600*12)),
-			array(__('One (1) day, %s seconds', 'spambl_l10n'),
+			array(__('One day, %s seconds', 'spambl_l10n'),
 				''.(3600*24)),
-			array(__('One (1) week, %s seconds', 'spambl_l10n'),
+			array(__('One week, %s seconds', 'spambl_l10n'),
 				''.(3600*24*7)),
+			array(__('Two weeks, %s seconds', 'spambl_l10n'),
+				''.(3600*24*7*2)),
+			array(__('Four weeks, %s seconds', 'spambl_l10n'),
+				''.(3600*24*7*4)),
 			array(__('Set a value in seconds:', 'spambl_l10n'), ''.(0))
 		);
 
 		$v = trim('' . $a[$k]);
 		$bhit = false;
-		$txtval = ''.(3600*24);
+		$txtval = ''.(3600*24*7*2);
 
 		foreach ( $va as $oa ) {
 			$txt = self::wt($oa[0]);
@@ -2327,6 +2395,7 @@ class Spam_BLIP_class {
 			array(__('Ten (10)', 'spambl_l10n'), '10'),
 			array(__('Fifty (50)', 'spambl_l10n'), '50'),
 			array(__('One hundred (100)', 'spambl_l10n'), '100'),
+			array(__('Two hundred (200)', 'spambl_l10n'), '200'),
 			array(__('Five hundred (500)', 'spambl_l10n'), '500'),
 			array(__('One thousand (1000)', 'spambl_l10n'), '1000'),
 			array(__('Set a value:', 'spambl_l10n'), '0')
@@ -2334,7 +2403,7 @@ class Spam_BLIP_class {
 
 		$v = trim('' . $a[$k]);
 		$bhit = false;
-		$txtval = '50';
+		$txtval = '150';
 
 		foreach ( $va as $oa ) {
 			$txt = self::wt($oa[0]);
@@ -2508,7 +2577,7 @@ class Spam_BLIP_class {
 		$aargs = array(
 			// textarea element attributes; esp., name
 			'txattl' => $txatt . ' placeholder="127.0.0.2" name="' . "{$gr}[{$ol}]" . '"',
-			'txattr' => $txatt . ' placeholder="127.0.0.32" name="' . "{$gr}[{$or}]" . '"',
+			'txattr' => $txatt . ' placeholder="10.0.0.0/8/255.0.0.0" name="' . "{$gr}[{$or}]" . '"',
 			// textarea initial values
 			'txvall' => $vl,
 			'txvalr' => $vr,
@@ -3314,7 +3383,27 @@ class Spam_BLIP_class {
 		if ( $l === '' || ! is_array($l) || count($l) < 1 ) {
 			return false;
 		}
-		if ( array_search($addr, $l) === false ) {
+
+		// find address, or as of 1.0.2 network, match
+		// see comment in validate()
+		$hit = false;
+		foreach ( $l as $v ) {
+			$a = explode('/', $v);
+			if ( is_array($a) && count($a) > 1 ) {
+				// when entered on the settings page,
+				// validation code made string clean and normal,
+				// so array contents should be as expected
+				$n = $a[0]; // net addr
+				$m = $a[1]; // net mask
+				$hit = NetMisc_0_0_1::is_addr_in_net($addr, $n, $m);
+			} else {
+				$hit = ($addr === $v) ? true : false;
+			}
+			if ( $hit !== false ) {
+				break;
+			}
+		}
+		if ( $hit === false ) {
 			return false;
 		}
 
@@ -3355,7 +3444,27 @@ class Spam_BLIP_class {
 		if ( $l === '' || ! is_array($l) || count($l) < 1 ) {
 			return false;
 		}
-		if ( array_search($addr, $l) === false ) {
+
+		// find address, or as of 1.0.2 network, match
+		// see comment in validate()
+		$hit = false;
+		foreach ( $l as $v ) {
+			$a = explode('/', $v);
+			if ( is_array($a) && count($a) > 1 ) {
+				// when entered on the settings page,
+				// validation code made string clean and normal,
+				// so array contents should be as expected
+				$n = $a[0]; // net addr
+				$m = $a[1]; // net mask
+				$hit = NetMisc_0_0_1::is_addr_in_net($addr, $n, $m);
+			} else {
+				$hit = ($addr === $v) ? true : false;
+			}
+			if ( $hit !== false ) {
+				break;
+			}
+		}
+		if ( $hit === false ) {
 			return false;
 		}
 

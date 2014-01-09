@@ -138,6 +138,17 @@ Choose any one, they all work.
 
 == Changelog ==
 
+= 1.0.2 =
+* Small code cleanups.
+* Tweak database table options: Intro text re. max records clarified;
+	TTL option radios added for two and four weeks, max data records
+	option radio added for 200 records, defaults increased to
+	two weeks and 200 records respectively.
+* User-set blacklist and whitelist:
+	Now a net-address/net-mask is accepted, so a whole subnet may be
+	blacklisted or whitelisted. See settings page "Advanced Options"
+	introduction text.
+
 = 1.0.1 =
 * Small code cleanups.
 * Made the "Screen Options" tab -> "Section Introductions" checkbox
@@ -155,6 +166,12 @@ Choose any one, they all work.
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+* User-set blacklist and whitelist:
+	Now a net-address/net-mask is accepted, so a whole subnet may be
+	blacklisted or whitelisted. See settings page "Advanced Options"
+	introduction text.
 
 = 1.0.0 =
 * Initial release.

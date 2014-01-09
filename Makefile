@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 # License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
 
-PRJVERS = 1.0.1
+PRJVERS = 1.0.2
 PRJSTEM = Spam_BLIP
 PRJNAME = $(PRJSTEM)-$(PRJVERS)
 
@@ -15,6 +15,7 @@ SRCS = ${PRJSTEM}.php \
 	OptSection_0_0_2b.inc.php \
 	OptPage_0_0_2b.inc.php \
 	ChkBL_0_0_1.inc.php \
+	NetMisc_0_0_1.inc.php \
 	index.php
 
 # The Opt*.php are support classes, not tied to this plugin,
