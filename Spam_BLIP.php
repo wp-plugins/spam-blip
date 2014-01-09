@@ -4254,6 +4254,8 @@ EOQ;
 		$tf = self::best_time();
 		$tm = (int)$tf;
 		$types = "lasttype = 'pings' OR lasttype = 'comments'";
+		// Update in 1.0.2: should have included blacklist type
+		$types .= " OR lasttype = 'black'";
 
 		$w = '' . ($tm - $hour);
 		$a = $this->db_FUNC('COUNT(*)',
