@@ -49,8 +49,8 @@ if ( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
 // supporting classes found in files named "${cl}.inc.php"
 // each class must define static method id_token() which returns
 // the correct int, to help avoid name clashes
-if ( ! function_exists( 'Spam_BLIP_plugin_paranoid_require_class' ) ) :
-function Spam_BLIP_plugin_paranoid_require_class ($cl) {
+if ( ! function_exists( 'spamblip_paranoid_require_class' ) ) :
+function spamblip_paranoid_require_class ($cl) {
 	$id = 0xED00AA33;
 	$meth = 'id_token';
 	if ( ! class_exists($cl) ) {
@@ -70,12 +70,8 @@ endif;
 
 // these support classes are in separate files as they are
 // not specific to this plugin, and may be used in others
-Spam_BLIP_plugin_paranoid_require_class('OptField_0_0_2b');
-Spam_BLIP_plugin_paranoid_require_class('OptSection_0_0_2b');
-Spam_BLIP_plugin_paranoid_require_class('OptPage_0_0_2b');
-Spam_BLIP_plugin_paranoid_require_class('Options_0_0_2b');
-Spam_BLIP_plugin_paranoid_require_class('ChkBL_0_0_1');
-Spam_BLIP_plugin_paranoid_require_class('NetMisc_0_0_1');
+spamblip_paranoid_require_class('ChkBL_0_0_1');
+spamblip_paranoid_require_class('NetMisc_0_0_1');
 
 /**********************************************************************\
  *  misc. functions                                                   *
@@ -271,8 +267,8 @@ class Spam_BLIP_class {
 	// array to hold arg to wp_schedule_event:
 	private static $wp_cron_arg = array(self::maint_intvl);
 
-	// object of class to handle options under WordPress
-	protected $opt = null;
+	// Settings page object
+	protected $spg = null;
 	
 	// An instance of the blacklist check class ChkBL_0_0_1
 	protected $chkbl = null;
@@ -357,7 +353,7 @@ class Spam_BLIP_class {
 
 	public function __destruct() {
 		// FPO
-		$this->opt = null;
+		$this->spg = null;
 	}
 	
 	// get array of defaults for the plugin options; if '$chkonly'
@@ -447,12 +443,18 @@ class Spam_BLIP_class {
 
 	// initialize options/settings page
 	protected function init_settings_page() {
-		if ( $this->opt ) {
+		if ( $this->spg ) {
 			return;
 		}
 		$items = self::get_opt_group();
 
-		// use Opt* classes for page, sections, and fields
+		// use Opt* classes for page, sections, and fields;
+		// these support classes are in separate files as they are
+		// not specific to this plugin, and may be used in others
+		spamblip_paranoid_require_class(self::mk_aclv('OptField'));
+		spamblip_paranoid_require_class(self::mk_aclv('OptSection'));
+		spamblip_paranoid_require_class(self::mk_aclv('OptPage'));
+		spamblip_paranoid_require_class(self::mk_aclv('Options'));
 		
 		// mk_aclv adds a suffix to class names
 		$Cf = self::mk_aclv('OptField');
@@ -659,14 +661,14 @@ class Spam_BLIP_class {
 			array(__CLASS__, 'validate_opts'),
 			/* pagetype = 'options' */ '',
 			/* capability = 'manage_options' */ '',
-			array($this, 'setting_page_output_callback')/* callback '' */,
+			array($this, 'settings_page_output_callback')/* callback '' */,
 			/* 'hook_suffix' callback array */ $suffix_hooks,
 			self::wt(__('<em>Spam BLIP</em> Plugin Settings', 'spambl_l10n')),
 			self::wt(__('Options controlling <em>Spam BLIP</em> functions.', 'spambl_l10n')),
 			self::wt(__('Save Settings', 'spambl_l10n')));
 		
 		$Co = self::mk_aclv('Options');
-		$this->opt = new $Co($page);
+		$this->spg = new $Co($page);
 	}
 
 	// filter for wp-admin/includes/screen.php get_column_headers()
@@ -784,7 +786,7 @@ class Spam_BLIP_class {
 		));
 	
 		// finagle the "Screen Options" tab
-		$h = 'manage_' . $this->opt->get_page_suffix() . '_columns';
+		$h = 'manage_' . $this->spg->get_page_suffix() . '_columns';
 		add_filter($h, array($this, 'screen_options_columns'));
 		$h = 'screen_options_show_screen';
 		add_filter($h, array($this, 'screen_options_show'), 200);
@@ -833,12 +835,12 @@ class Spam_BLIP_class {
 	// Options::admin_page() -- it is somehow *always* stripped out!
 	// After hours I cannot figure this out; but, having added this
 	// function as the page callback, I can add the anchor after
-	// calling $this->opt->admin_page() (which is Options::admin_page())
+	// calling $this->spg->admin_page() (which is Options::admin_page())
 	// BUT it still does not show in the page if the echo is moved
 	// into Options::admin_page() and placed just before return!
 	// Baffled.
-	public function setting_page_output_callback() {
-		$r = $this->opt->admin_page();
+	public function settings_page_output_callback() {
+		$r = $this->spg->admin_page();
 		echo "<a name='aSubmit'/>\n";
 		return $r;
 	}
@@ -4644,9 +4646,6 @@ class Spam_BLIP_widget_class extends WP_Widget {
 	public function form($instance) {
 		$wt = 'wptexturize';  // display with char translations
 		$ht = 'Spam_BLIP_php52_htmlent'; // escape w/o char translations
-		// NOTE on encoding: do *not* use JS::unescape()!
-		// JS::decodeURIComponent() should use the page charset (which
-		// still leaves room for error; this assumes UTF-8 presently)
 		$et = 'rawurlencode'; // %XX -- for transfer
 
 		// form ctls: URL is checkbox
