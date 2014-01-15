@@ -45,14 +45,6 @@ class NetMisc_0_0_1 {
 		return self::$evh_opt_id;
 	}
 
-	// test stubs to support what follows
-	public static function is_IP4_addr($addr)
-	{
-		$r = filter_var($addr
-			, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
-		return ($r !== false);
-	}
-	
 	// take arg in $addr in either CIDR (int) or
 	// dotted quad form check for errors, return
 	// CIDR in $aout[0] snd dotted quad in $aout[1]
@@ -75,7 +67,7 @@ class NetMisc_0_0_1 {
 			}
 			$mc = long2ip($mi);
 		// check traditional mask
-		} else if ( self::is_IP4_addr($m) ) {
+		} else if ( self::is_addr_OK($m) ) {
 			$mc = $m;
 			$mi = ip2long($m);
 			$m = 32;
@@ -111,7 +103,7 @@ class NetMisc_0_0_1 {
 			// additional bug that both '((1 << $m) - 1)' and
 			// '(1 << $m)' yield -2147483648 when $m is 31, while
 			// in 5.3 '((1 << $m) - 1)' is 2147483647 for $m==31.
-			} else if ( $m !== 32 && (int)($mi + 1) !== (int)(1 << $m) ) {
+			} else if ( $m < 32 && (int)($mi + 1) !== (int)(1 << $m) ) {
 				return false;
 			}
 			$m = '' . $m;
@@ -195,7 +187,9 @@ class NetMisc_0_0_1 {
 	
 	// check IP4 address arg for sanity
 	public static function is_addr_OK($addr) {
-		return (self::ip4_dots2int($addr) !== false);
+		// return (self::ip4_dots2int($addr) !== false);
+		$r = filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+		return ($r !== false);
 	}
 
 	// Unlike PHP ip2long(), this does
@@ -351,75 +345,5 @@ class IPReservedCheck_0_0_1 {
 	}
 }
 endif; // class_exists('IPReservedCheck_0_0_1')
-
-
-if ( false && php_sapi_name() === 'cli' ) {
-	// checks
-	$chks = array(
-		'46.118.113.0/255.255.0.0/15',
-		'46.118.113.0/255.254.0.0/15',
-		'46.118.113.0/16/255.254.0.0',
-		'46.118.113.0/15/255.254.0.0',
-		'46.118.113.0/255.255.255.254/31',
-		'46.118.113.0/31/255.255.255.254',
-		'46.118.113.0/128.0.0.0/1',
-		'46.118.113.0/1/128.0.0.0',
-		'46.118.113.0/29',
-		'46.118.113.0/255.255.255.248/29',
-		'46.118.113.0/255.255.255.247/29',
-		'46.118.113.0/255.255.255.249/29',
-		'46.118.113.0/255.240.0.0/12',
-		'46.118.113.0/12',
-		'46.118.113.0/255.255.248.0/29',
-		'46.118.113.0/255.248.0.0/29',
-		'46.118.113.0/14/255.232.0.0',
-		'46.118.113.0/11/255.232.0.0',
-		'46.118.113.0/255.224.0.0',
-		'255.255.127.63'
-	);
-
-	foreach ( $chks as $v ) {
-		$o = array();
-		$r = NetMisc_0_0_1::netaddr_norm($v, $o, false);
-		//$r = NetMisc_0_0_1::netaddr_norm($v);
-
-		printf("arg '%s' === '%s': %s/%s/%s\n", $v, '' . $r,
-			$r ? $o[0] : 'NG', $r ? $o[1] : 'NG', $r ? $o[2] : 'NG');
-		//printf("arg '%s' === '%s'\n", $v, '' . $r);
-	}
-	
-	// checks
-	$chks = array(
-		array('46.118.113.0', '12',
-			array('46.118.113.140', '46.118.127.49',
-				'46.119.113.12', '46.119.125.183')
-		),
-		array('46.118.113.0', '12',
-			array('46.18.113.140', '46.218.127.49',
-				'46.19.113.12', '46.219.125.183')
-		),
-		array('46.118.113.0', '10',
-			array('46.118.113.140', '46.118.127.49',
-				'46.119.113.12', '46.119.125.183')
-		),
-		array('46.118.113.0', '16',
-			array('46.118.113.140', '46.118.127.49',
-				'46.119.113.12', '46.119.125.183')
-		)
-	);
-	
-	foreach ( $chks as $aa ) {
-		$net = $aa[0];
-		$mask = $aa[1];
-		foreach ( $aa[2] as $a ) {
-			$t = NetMisc_0_0_1::is_addr_in_net($a, $net, $mask);
-			printf(
-				"%s -- %s is %sin net %s with mask %s\n",
-				$t ? 'True' : 'False', $a, $t ? '' : 'not ',
-				$net, $mask
-			);
-		}
-	}
-}
 
 ?>
