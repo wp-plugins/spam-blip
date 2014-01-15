@@ -1499,8 +1499,7 @@ class Spam_BLIP_class {
 						if ( $l == '' ) {
 							continue;
 						}
-						$chk = filter_var(
-							$l, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+						$chk = NetMisc_0_0_1::is_addr_OK($l);
 						if ( $chk === false ) {
 							// New v. 1.0.2: entry may be
 							// addr/netmask[/netmask], 2nd mask
