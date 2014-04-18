@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 # License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
 
-PRJVERS = 1.0.2
+PRJVERS = 1.0.3
 PRJSTEM = Spam_BLIP
 PRJNAME = $(PRJSTEM)-$(PRJVERS)
 
@@ -23,8 +23,8 @@ SRCS = ${PRJSTEM}.php \
 POTSRCS = ${PRJSTEM}.php
 
 JSDIR = js
-JSBIN = $(JSDIR)/screens.js
-JSSRC = $(JSDIR)/screens.dev.js
+JSBIN = $(JSDIR)/screens.min.js
+JSSRC = $(JSDIR)/screens.js
 
 LCDIR = locale
 #LCDOM = $(PRJSTEM)_l10n
@@ -58,12 +58,15 @@ ${PRJZIP}: ${JSBIN} ${ZALL} ${LCFPO}
 	zip -r -9 -v ${PRJZIP} ${PRJDIR}; rm -rf ${PRJDIR}; \
 	test -e ttd && mv ttd ${PRJDIR}; ls -l ${PRJZIP}
 
+# NOTE: Non-trivial JS broken by perl 'JavaScript::Packer'
+# (another package) so its use is remove; JavaScript::Minifier::XS
+# is new here (Ubuntu GNU/Linux)
 ${JSBIN}: ${JSSRC}
-	O=$@; I=$${O%.*}.dev.js; \
+	O=$@; I=$${O%%.*}.js; \
+	(P=`which perl` && $$P -e 'use JavaScript::Minifier::XS qw(minify); print minify(join("",<>))' < "$$I" > "$$O" 2>/dev/null ) \
+	|| \
 	(P=`which perl` && $$P -e 'use JavaScript::Minifier qw(minify);minify(input=>*STDIN,outfile=>*STDOUT)' < "$$I" > "$$O" 2>/dev/null) \
-	|| (P=`which perl` && $$P -e \
-		'use JavaScript::Packer;$$p=JavaScript::Packer->init();$$o=join("",<STDIN>);$$p->minify(\$$o,{"compress"=>"clean"});print STDOUT $$o;' < "$$I" > "$$O") \
-	|| cp -f "$$I" "$$O"
+	|| { cp -f "$$I" "$$O" && echo UN-MINIFIED $$I to $$O; }
 
 en_US-mo $(LCFPO): $(LCPOT)
 	@echo Making $(LCFPO).

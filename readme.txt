@@ -3,8 +3,8 @@ Contributors: EdHynan
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick%DONATE_LINK%hosted_button_id=4Q2Y8ZUG8HXLC
 Tags: anti-spam, comment spam, spam comments, blog spam, blog, comment, comments, content, links, network, plugin, post, Post, posts, security, spam, wordpress
 Requires at least: 3.0.2
-Tested up to: 3.8
-Stable tag: 1.0.2
+Tested up to: 3.9
+Stable tag: 1.0.3
 Text Domain: spambl_l10n
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -103,30 +103,9 @@ and does not have additional requirements for installation.
 
 == Frequently Asked Questions ==
 
-= Is this really a FAQ? =
+= What is the 'BLIP' in "Spam BLIP"? =
 
-No.
-
-= Is this plugin really about canned meat? =
-
-No. The canned meat is laudable, and venerated. You are not to be
-blamed for this confusion; the blame is on something completely
-different.
-
-= Hey, how about an *authentic, genuine* imitation FAQ? =
-
-Okay. What is the 'BLIP' in "Spam BLIP"? Think 'BLacklist IP'.
-
-= Any more? Howzabout the boring version number? =
-
-Right you are. Version numbers are useful, but sometimes fail
-to enliven the imagination. So, as it happens, this plugin was
-submitted to WordPress.org one day after the release they
-call Basie, and in that spirit this release of this plugin
-will be named Benny, which you may take to refer to Benny Goodman,
-or "Who Put the Benzedrine in Mrs. Murphy's Ovaltine" or 'Benefits?
-You want benefits? Are you an enemy of the Plutocratic Revolution?'
-Choose any one, they all work.
+Think 'BLacklist IP'.
 
 == Screenshots ==
 
@@ -137,6 +116,18 @@ Choose any one, they all work.
 3. The Spam BLIP DNS blacklist domain editor option.
 
 == Changelog ==
+
+= 1.0.3 =
+* Black/White list settings now accept a sub-network specified
+	as a range from minimum to maximum subnet address, as in
+	"N.N.N.N - N.N.N.N" (note the dash separator), which is
+	common in WHOIS listings.
+* Bugfix: typo in code that checks for reserved addresses. It had
+	only affected logging, using string "LOCALHOST"  rather than
+	"RESERVED".
+* Changed JS naming convention from dev.js -> .js to .js -> min.js.
+* Checked with shiny new WordPress 3.9, *but* not with PHP 3.5 and
+	new WP DB code used with PHP 3.5 -- feedback welcome.
 
 = 1.0.2 =
 * Small code cleanups.
@@ -166,6 +157,10 @@ Choose any one, they all work.
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+* Checked with shiny new WordPress 3.9, *but* not with PHP 3.5 and
+	new WP DB code used with PHP 3.5 -- feedback welcome.
 
 = 1.0.2 =
 * User-set blacklist and whitelist:

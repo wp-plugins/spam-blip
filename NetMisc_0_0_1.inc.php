@@ -116,6 +116,30 @@ class NetMisc_0_0_1 {
 	
 		return true;
 	}
+
+	// take range like 223.240.0.0 - 223.247.255.255
+	// and return a ADDR/CIDRMASK/DOTTEDMASK string,
+	// and place the values (in order above) in &$aout
+	public static function netrange_norm($amin, $amax, &$aout)
+	{
+		$a = self::ip4_dots2int($amin);
+		if ( $a === false ) {
+			return false;
+		}
+		$b = self::ip4_dots2int($amax);
+		if ( $b === false ) {
+			return false;
+		}
+
+		$g = long2ip(~($a ^ $b) & 0xFFFFFFFF);
+		// $g gives and receives
+		if ( self::netmask_norm($g, $g) !== true ) {
+			return false;
+		}
+
+		$aout = array($amin, $g[0], $g[1]);
+		return $amin . '/' . $g[0] . '/' . $g[1];
+	}
 	
 	// normalize an IP4 addr with netmask, sep'd by '/'
 	// if mask is missing it is considered /32; arg may
