@@ -3,7 +3,7 @@
 Plugin Name: Spam BLIP
 Plugin URI: http://agalena.nfshost.com/b1/?page_id=211
 Description: Stop comment spam before it is posted.
-Version: 1.0.2
+Version: 1.0.3
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -291,7 +291,7 @@ class Spam_BLIP_class {
 	// js subdirectory
 	const settings_jsdir = 'js';
 	// js file for settings page
-	const settings_jsname = 'screens.js';
+	const settings_jsname = 'screens.min.js';
 	// js path, built in ctor
 	protected $settings_js;
 	// JS: name of class to control textare/button pairs
@@ -1501,6 +1501,17 @@ class Spam_BLIP_class {
 						}
 						$chk = NetMisc_0_0_1::is_addr_OK($l);
 						if ( $chk === false ) {
+							// New v. 1.0.3: entry may be
+							// a range netmin-netmax
+							$nma = '/[0-9\.]+[ \t]*-[ \t]*[0-9\.]+/';
+							if ( preg_match($nma, $l) ) {
+								$nma = explode('-', $l);
+								$chk = NetMisc_0_0_1::netrange_norm(
+									trim($nma[0]), trim($nma[1]), $nma);
+								if ( $chk !== false ) {
+									$l = $chk;
+								}
+							}
 							// New v. 1.0.2: entry may be
 							// addr/netmask[/netmask], 2nd mask
 							// optional so that one may be CIDR and
@@ -2106,7 +2117,12 @@ class Spam_BLIP_class {
 			to the left of the slash and the network mask appears
 			to the right of the slash. The network mask may be given
 			in CIDR notation (number of bits) or the traditional
-			dotted quad form. When the settings are submitted, these
+			dotted quad form. A subnet may also be given as a range
+			from minimum to maximum network address, as in
+			"<code>N.N.N.N - N.N.N.N</code>". (A subnet specified
+			as a range is often found in <strong>WHOIS</strong>
+			output.)
+			When the settings are submitted, these
 			arguments are normalized so that
 			"<code>N.N.N.N/CIDR/N.N.N.N</code>"
 			will appear. You may specify both CIDR and dotted quad
@@ -3232,7 +3248,7 @@ class Spam_BLIP_class {
 				$rsz = __('RESERVED', 'spambl_l10n');
 				// TRANSLATORS: word for ietf/iana loopback network
 				$lpb = __('LOOPBACK', 'spambl_l10n');
-				$ret = $ret ? $rsv : $lpb;
+				$ret = $ret ? $rsz : $lpb;
 				// TRANSLATORS: %1$s is either "RESERVED" or "LOOPBACK";
 				// see comments above.
 				// %2$s is an IPv4 dotted quad address
@@ -4428,8 +4444,8 @@ class Spam_BLIP_widget_class extends WP_Widget {
 		}
 
 		// use no class, but do use deprecated align
-		$code = 'widget-div';
-		$dv = '<div id="'.$code.'" align="left">';
+		$code = sprintf('Spam_BLIP_widget_%06u', rand());
+		$dv = '<div id="'.$code.'" class="widget" align="left">';
 		echo "\n<!-- Spam BLIP plugin: info widget div -->\n{$dv}";
 
 		$wt = 'wptexturize';  // display with char translations
