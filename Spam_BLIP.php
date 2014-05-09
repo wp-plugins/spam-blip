@@ -3,7 +3,7 @@
 Plugin Name: Spam BLIP
 Plugin URI: http://agalena.nfshost.com/b1/?page_id=211
 Description: Stop comment spam before it is posted.
-Version: 1.0.3
+Version: 1.0.4
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -43,7 +43,7 @@ Text Domain: spambl_l10n
 // check for naughty direct invocation; w/o this we'd soon die
 // from undefined WP functions anyway, but let's check anyway
 if ( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
-	die("Oh, you naughty boy||girl||other!\n");
+	die("Don't invoke me like that!\n");
 }
 
 // supporting classes found in files named "${cl}.inc.php"
@@ -335,10 +335,23 @@ class Spam_BLIP_class {
 		$cl = __CLASS__;
 
 		if ( $adm ) {
+			// Some things that must be *before* 'init'
+			// NOTE cannot call current_user_can() because
+			// its dependencies might not be ready at this point!
+			// Use condition on current_user_can() in the callbacks
+			// keep it clean: {de,}activation
+			$aa = array($cl, 'on_deactivate');
+			register_deactivation_hook($pf, $aa);
+			$aa = array($cl, 'on_activate');
+			register_activation_hook($pf,   $aa);
+
+			$aa = array($cl, 'on_uninstall');
+			register_uninstall_hook($pf,    $aa);
+	
 			// add 'Settings' link on the plugins page entry
 			// cannot be in activate hook
 			$name = plugin_basename($pf);
-			add_filter("plugin_action_links_$name",
+			add_filter("plugin_action_links_" . $name,
 				array($cl, 'plugin_page_addlink'));
 		}
 
@@ -678,7 +691,8 @@ class Spam_BLIP_class {
 			$a = array();
 		}
 		// checkbox id will 'verbose_show-hide'
-		$a['verbose_show'] = __('Section introductions', 'spambl_l10n');
+		$a['verbose_show'] =
+			self::wt(__('Section introductions', 'spambl_l10n'));
 		return $a;
 	}
 
@@ -851,10 +865,14 @@ class Spam_BLIP_class {
 	
 	// deactivate cleanup
 	public static function on_deactivate() {
+		if ( ! current_user_can('activate_plugins') ) {
+			return;
+		}
+
 		$wreg = __CLASS__;
 		$name = plugin_basename(self::mk_pluginfile());
 		$aa = array($wreg, 'plugin_page_addlink');
-		remove_filter("plugin_action_links_$name", $aa);
+		remove_filter("plugin_action_links_" . $name, $aa);
 
 		self::unregi_widget();
 
@@ -876,6 +894,10 @@ class Spam_BLIP_class {
 
 	// activate setup
 	public static function on_activate() {
+		if ( ! current_user_can('activate_plugins') ) {
+			return;
+		}
+
 		$wreg = __CLASS__;
 		$aa = array($wreg, 'regi_widget');
 		add_action('widgets_init', $aa, 1);
@@ -895,6 +917,10 @@ class Spam_BLIP_class {
 
 	// uninstall cleanup
 	public static function on_uninstall() {
+		if ( ! current_user_can('install_plugins') ) {
+			return;
+		}
+
 		self::unregi_widget();
 		
 		$opts = self::get_opt_group();
@@ -928,7 +954,7 @@ class Spam_BLIP_class {
 	}
 
 	// register the Spam_BLIP_plugin widget
-	public static function regi_widget ($fargs = array()) {
+	public static function regi_widget($fargs = array()) {
 		global $wp_widget_factory;
 		if ( ! isset($wp_widget_factory) ) {
 			return;
@@ -943,7 +969,7 @@ class Spam_BLIP_class {
 	}
 
 	// unregister the Spam_BLIP_plugin widget
-	public static function unregi_widget () {
+	public static function unregi_widget() {
 		global $wp_widget_factory;
 		if ( ! isset($wp_widget_factory) ) {
 			return;
@@ -955,7 +981,7 @@ class Spam_BLIP_class {
 	}
 
 	// to be done at WP init stage
-	public function init_hook_func () {
+	public function init_hook_func() {
 		self::load_translations();
 		$this->init_opts();
 
@@ -965,22 +991,6 @@ class Spam_BLIP_class {
 		$cl = __CLASS__; // for static methods callbacks
 
 		if ( $adm ) {
-			// keep it clean: {de,}activation
-			$pf = self::mk_pluginfile();
-			if ( current_user_can('activate_plugins') ) {
-				$aa = array($cl, 'on_deactivate');
-				register_deactivation_hook($pf, $aa);
-				$aa = array($cl, 'on_activate');
-				register_activation_hook($pf,   $aa);
-			}
-			if ( current_user_can('install_plugins') ) {
-				$aa = array($cl, 'on_uninstall');
-				register_uninstall_hook($pf,    $aa);
-			}
-	
-			//$aa = array($cl, 'filter_admin_print_scripts');
-			//add_action('admin_print_scripts', $aa);
-	
 			// Settings/Options page setup
 			if ( current_user_can('manage_options') ) {
 				$this->init_settings_page();
@@ -991,9 +1001,15 @@ class Spam_BLIP_class {
 				 self::get_usedata_option() != 'false' ) {
 				$this->db_create_table();
 	
-				// not sufficiently certain about this; we
-				// do our own table maintenance anyway
-				if ( false && defined('WP_ALLOW_REPAIR') ) {
+				// user should not have 'WP_ALLOW_REPAIR'
+				// defined all the time; naughty types could
+				// repeatedly invoke wp-admin/maint/repair.php
+				// to increase server load and lockup DB and
+				// who knows, maybe even exploit MySQL bugs.
+				// IAC, for real use, it should be OK to
+				// include our table -- WP does CHECK TABLE
+				// and REPAIR TABLE and maybe ANALYZE TABLE
+				if ( defined('WP_ALLOW_REPAIR') ) {
 					$aa = array($this, 'filter_tables_to_repair');
 					add_filter('tables_to_repair', $aa, 100);
 				}
@@ -1441,9 +1457,9 @@ class Spam_BLIP_class {
 							$e = __('bad TTL option: "%s"', 'spambl_l10n');
 							$e = sprintf($e, $ot);
 							self::errlog($e);
-							add_settings_error(self::wt($k),
+							add_settings_error(self::ht($k),
 								sprintf('%s[%s]', self::opt_group, $k),
-								self::wt($e), 'error');
+								self::ht($e), 'error');
 							$a_out[$k] = $oo;
 							$nerr++;
 							break;
@@ -1475,9 +1491,9 @@ class Spam_BLIP_class {
 							$e = __('bad maximum: "%s"', 'spambl_l10n');
 							$e = sprintf($e, $ot);
 							self::errlog($e);
-							add_settings_error(self::wt($k),
+							add_settings_error(self::ht($k),
 								sprintf('%s[%s]', self::opt_group, $k),
-								self::wt($e), 'error');
+								self::ht($e), 'error');
 							$a_out[$k] = $oo;
 							$nerr++;
 							break;
@@ -1549,9 +1565,9 @@ class Spam_BLIP_class {
 							$e = __('bad user %1$s address set: "%2$s"', 'spambl_l10n');
 							$e = sprintf($e, $lnm, $l);
 							self::errlog($e);
-							add_settings_error(self::wt($k),
+							add_settings_error(self::ht($k),
 								sprintf('%s[%s]', self::opt_group, $k),
-								self::wt($e), 'error');
+								self::ht($e), 'error');
 							// error counter
 							$nerr++;
 							// for special handling
@@ -1601,9 +1617,9 @@ class Spam_BLIP_class {
 							$e = __('bad blacklist domain set: "%s"', 'spambl_l10n');
 							$e = sprintf($e, $ln);
 							self::errlog($e);
-							add_settings_error(self::wt($k),
+							add_settings_error(self::ht($k),
 								sprintf('%s[%s]', self::opt_group, $k),
-								self::wt($e), 'error');
+								self::ht($e), 'error');
 							// error counter
 							$nerr++;
 							// for special handling
@@ -1656,9 +1672,9 @@ class Spam_BLIP_class {
 						$e = sprintf('bad checkbox option: %s[%s]',
 							$k, $v);
 						self::errlog($e);
-						add_settings_error(self::wt($k),
+						add_settings_error(self::ht($k),
 							sprintf('%s[%s]', self::opt_group, $k),
-							self::wt($e), 'error');
+							self::ht($e), 'error');
 						$a_out[$k] = $oo;
 						$nerr++;
 					} else {
@@ -1667,12 +1683,14 @@ class Spam_BLIP_class {
 					}
 					break;
 				default:
-					$e = "funny key in validate opts: '" . $k . "'";
+					$e = sprintf(
+						__('bad key in option validation: "%s"', 'spambl_l10n')
+						, $k);
 					self::errlog($e);
-					add_settings_error(self::wt($k),
+					add_settings_error(self::ht($k),
 						sprintf('ERR_%s[%s]',
 							self::opt_group, self::ht($k)),
-						self::wt($e), 'error');
+						self::ht($e), 'error');
 					$nerr++;
 			}
 		}
@@ -2222,6 +2240,7 @@ class Spam_BLIP_class {
 	
 		$jsarg = sprintf('"%s","%s","%s","%s","%s"',
 			$ltxid, $rtxid, $lbtid, $rbtid, $dbg_span);
+		// TODO: lose the align="" in the table below
 	?>
 	
 		<table id="<?php echo $tableid; ?>"><tbody>
@@ -3741,40 +3760,37 @@ class Spam_BLIP_class {
 		return $this->data_table;
 	}
 	
-	// lock table for some ops, in case concurrent page requests
-	// cause intermixed calls to these routines from different sessions
-	// *DO* unlock when done: MySQL docs say the lock will prevent
-	// access to *other* tables, which would prevent WP in any
-	// subsequent DB ops.
-	// UPDATE: we possibly lack privilege for "LOCK TABLES",
+	// Probably lack privilege for "LOCK TABLES",
 	// so use this advisory form; unlocking is less critical,
-	// but of course still should not be forgotten
-	protected function db_lock_table($type = 'WRITE') {
+	// but of course still should not be forgotten (server
+	// removes a lock when connection is closed, say docs).
+	// Added 1.0.4: $tmo: timeout arg (was a hardcoded 10);
+	// default is long to cover varied net symptoms, plus
+	// $type arg removed as it was only an artifact
+	protected function db_lock_table($tmo = 45) {
 		global $wpdb;
 		$tbl = $this->db_tablename();
 		$lck = 'lck_' . $tbl;
-		$r = $wpdb->get_results(
-			"SELECT GET_LOCK('{$lck}',10);", ARRAY_N
-		);
+		$qs = sprintf("SELECT GET_LOCK('%s',%u);", $lck, (int)$tmo);
+		$r = $wpdb->get_results($qs, ARRAY_N);
 		if ( is_array($r) && is_array($r[0]) ) {
 			return (int)$r[0][0];
 		}
-		self::errlog("FAILED SELECT GET_LOCK('{$lck}',10);");
+		self::errlog("FAILED get lock query " . $qs);
 		return false;
 	}
 	
 	// unlock locked table: DO NOT FORGET
-	protected function db_unlock_table($type = 'WRITE') {
+	protected function db_unlock_table() {
 		global $wpdb;
 		$tbl = $this->db_tablename();
 		$lck = 'lck_' . $tbl;
-		$r = $wpdb->get_results(
-			"SELECT RELEASE_LOCK('{$lck}');", ARRAY_N
-		);
+		$qs = sprintf("SELECT RELEASE_LOCK('%s');", $lck);
+		$r = $wpdb->get_results($qs, ARRAY_N);
 		if ( is_array($r) && is_array($r[0]) ) {
 			return (int)$r[0][0];
 		}
-		self::errlog("FAILED SELECT RELEASE_LOCK('{$lck}');");
+		self::errlog("FAILED release lock query " . $qs);
 		return false;
 	}
 	
@@ -3833,6 +3849,8 @@ class Spam_BLIP_class {
 		$fpct = 0;
 		$len = 0;
 
+		$this->db_lock_table();
+		
 		$r = $wpdb->get_results(
 			"SELECT data_length, data_free "
 			. "FROM information_schema.TABLES "
@@ -3872,6 +3890,8 @@ class Spam_BLIP_class {
 				sprintf('ANALYZE: length %d, free %d', $len, $free));
 			$wpdb->query("ANALYZE TABLE {$tbl}");
 		}
+
+		$this->db_unlock_table();
 	}
 	
 	// create the data store table
@@ -3942,7 +3962,6 @@ CREATE TABLE $tbl (
 
 EOQ;
 
-		// back to pretty-pretty indents!
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($qs);
 
@@ -3955,7 +3974,7 @@ EOQ;
 	// get record for an IP address; returns null
 	// (as $wpdb->get_row() is documented to do),
 	// or associative array
-	protected function db_get_address($addr) {
+	protected function db_get_address($addr, $lock = true) {
 		if ( $this->db_get_addr_cache !== null
 			&& $this->db_get_addr_cache[0] === $addr ) {
 			return $this->db_get_addr_cache[1];
@@ -3963,9 +3982,15 @@ EOQ;
 
 		global $wpdb;
 		$tbl = $this->db_tablename();
-		
+
 		$q = "SELECT * FROM {$tbl} WHERE address = '{$addr}'";
+		
+		
+		if ( $lock )
+			$this->db_lock_table();
 		$r = $wpdb->get_row($q, ARRAY_A);
+		if ( $lock )
+			$this->db_unlock_table();
 
 		if ( is_array($r) ) {
 			$this->db_get_addr_cache = array($addr, $r);
@@ -3979,13 +4004,17 @@ EOQ;
 	// get number of records -- checks the store version options
 	// first for whether the table should exist -- returns
 	// false if the option does not exist
-	protected function db_get_rowcount() {
+	protected function db_get_rowcount($lock = true) {
 		global $wpdb;
 		$tbl = $this->db_tablename();
 
+		if ( $lock )
+			$this->db_lock_table();
 		$r = $wpdb->get_results(
 			"SELECT COUNT(*) FROM {$tbl}", ARRAY_N
 		);
+		if ( $lock )
+			$this->db_unlock_table();
 
 		if ( is_array($r) && isset($r[0]) && isset($r[0][0]) ) {
 			return $r[0][0];
@@ -3995,7 +4024,8 @@ EOQ;
 	}
 
 	// general function of select
-	protected function db_FUNC($f, $where = null, $group = null) {
+	protected
+	function db_FUNC($f, $where = null, $group = null, $lock = true) {
 		global $wpdb;
 		$tbl = $this->db_tablename();
 		
@@ -4007,7 +4037,11 @@ EOQ;
 			$q .= ' GROUP BY ' . $group;
 		}
 
+		if ( $lock )
+			$this->db_lock_table();
 		$r = $wpdb->get_results($q, ARRAY_N);
+		if ( $lock )
+			$this->db_unlock_table();
 
 		if ( is_array($r) ) {
 			return $r;
@@ -4023,7 +4057,6 @@ EOQ;
 		
 		$ts = sprintf('%u', 0 + $ts);
 
-		$this->db_lock_table();
 		// NOTE: address <> '0.0.0.0' was necessary with mysql
 		// commandline client:
 		// "safe update [...] without a WHERE that uses a KEY column";
@@ -4032,6 +4065,7 @@ EOQ;
 		// it's added for 'noia's sake, and should not affect
 		// results as address should never be '0.0.0.0'
 		$noid = "address <> '0.0.0.0' AND ";
+		$this->db_lock_table();
 		$wpdb->get_results(
 			"DELETE IGNORE FROM {$tbl} WHERE {$noid}seenlast < {$ts};",
 			ARRAY_N
@@ -4052,9 +4086,6 @@ EOQ;
 	// remove older rows so that row count == $max
 	protected function db_remove_above_max($mx) {
 		$ret = false;
-		
-		// these several ops should lock out other sessions
-		$this->db_lock_table();
 
 		// 'row_count'
 		$c = $this->db_get_rowcount();
@@ -4088,6 +4119,7 @@ EOQ;
 			// it's added for 'noia's sake, and should not affect
 			// results as address should never be '0.0.0.0'
 			$noid = "WHERE address <> '0.0.0.0' ";
+			$this->db_lock_table();
 			$wpdb->get_results(
 				"DELETE FROM {$tbl} {$noid}ORDER BY seenlast LIMIT {$c};",
 				ARRAY_N
@@ -4096,14 +4128,13 @@ EOQ;
 				"SELECT ROW_COUNT();",
 				ARRAY_N
 			);
+			$this->db_unlock_table();
 	
 			if ( is_array($r) && isset($r[0]) && isset($r[0][0]) ) {
 				$ret = (int)$r[0][0];
 			}
 		} while ( false );
 
-		$this->db_unlock_table();
-		
 		return $ret;
 	}
 
@@ -4126,7 +4157,7 @@ EOQ;
 
 	// delete record from address -- uses method
 	// added in WP 3.4.0
-	protected function db_remove_address($addr) {
+	protected function db_remove_address($addr, $lock = true) {
 		if ( $this->db_get_addr_cache !== null
 			&& $this->db_get_addr_cache[0] === $addr ) {
 			$this->db_get_addr_cache = null;
@@ -4136,12 +4167,12 @@ EOQ;
 		$tbl = $this->db_tablename();
 		$r = false;
 
-		$this->db_lock_table();
-
 		$q = "DELETE * FROM {$tbl} WHERE address = '{$addr}'";
+		if ( $lock )
+			$this->db_lock_table();
 		$r = $wpdb->get_results($q, ARRAY_N);
-
-		$this->db_unlock_table();
+		if ( $lock )
+			$this->db_unlock_table();
 
 		return $r;
 	}
@@ -4150,10 +4181,11 @@ EOQ;
 	// $check1st may be false if caller is certain
 	// the existence of the record need not be checked
 	// NOTE: does *not* lock!
-	protected function db_insert_array($a, $check1st = true) {
+	protected
+	function db_insert_array($a, $check1st = true, $lock = true) {
 		// optional check for record first
 		if ( $check1st !== false ) {
-			$r = $this->db_get_address($a['address']);
+			$r = $this->db_get_address($a['address'], $lock);
 			if ( is_array($r) ) {
 				return false;
 			}
@@ -4162,27 +4194,33 @@ EOQ;
 		global $wpdb;
 		$tbl = $this->db_tablename();
 
+		if ( $lock )
+			$this->db_lock_table();
 		$r = $wpdb->insert($tbl, $a,
 			array('%s','%d','%d','%d','%s','%d')
 		);
+		if ( $lock )
+			$this->db_unlock_table();
 
 		return $r;
 	}
 	
 	// update record from an associative array
 	// will insert record that doesn't exist if $insert is true
-	protected function db_update_array($a, $insert = true) {
-		$this->db_lock_table();
+	protected
+	function db_update_array($a, $insert = true, $lock = true) {
+		if ( $lock )
+			$this->db_lock_table();
+
 		// insert if record dies not exist
-		$r = $this->db_get_address($a['address']);
+		$r = $this->db_get_address($a['address'], false);
 		if ( ! is_array($r) ) {
+			$r = false;
 			if ( $insert === true ) {
-				$r = $this->db_insert_array($a, false);
-				$this->db_unlock_table();
-				return $r;
+				$r = $this->db_insert_array($a, false, false);
 			}
 			$this->db_unlock_table();
-			return false;
+			return $r;
 		}
 
 		global $wpdb;
@@ -4215,25 +4253,31 @@ EOQ;
 			array('%s')
 		);
 
-		$this->db_unlock_table();
+		if ( $lock )
+			$this->db_unlock_table();
+
 		return $r;
 	}
 	
 	// make insert/update array from separate args
-	protected function db_make_array(
-		$addr, $hitincr, $time, $type = 'comments')
+	protected
+	function db_make_array($addr, $hitincr, $time, $type = 'comments')
 	{
 		// setup the enum field "lasttype"; avoid assumption
 		// that arg and enum keys will match, although
 		// they should -- this can be made helpful or fuzzy, later
 		$t = 'x1';
-		if ( $type === 'comments' ) { $t = 'comments'; }
-		if ( $type === 'pings' )    { $t = 'pings'; }
-		if ( $type === 'torx' )   { $t = 'torx'; }
-		if ( $type === 'x2' )   { $t = 'x2'; }
-		if ( $type === 'non' )   { $t = 'non'; }
-		if ( $type === 'white' )   { $t = 'white'; }
-		if ( $type === 'black' )   { $t = 'black'; }
+		switch ( $type ) {
+			case 'comments': $t = 'comments'; break;
+			case 'pings'   : $t = 'pings';    break;
+			case 'torx'    : $t = 'torx';     break;
+			case 'non'     : $t = 'non';      break;
+			case 'white'   : $t = 'white';    break;
+			case 'black'   : $t = 'black';    break;
+			case 'x2'      : $t = 'x2';       break;
+			case 'x1'      : $t = 'x1';       break;
+			default        : $t = 'x1';       break;
+		}
 
 		return array(
 			'address'  => $addr,
@@ -4248,7 +4292,10 @@ EOQ;
 	// public: get some info on the data store; e.g., for
 	// the widget -- return map where ['k'] is an array
 	// of avalable keys, not including 'k'
-	public function get_db_info() {
+	public function get_db_info($lock = true) {
+		if ( $lock )
+			$this->db_lock_table();
+
 		$r = array(
 			'k' => array()
 		);
@@ -4256,8 +4303,10 @@ EOQ;
 		//global $wpdb;
 		//$wpdb->show_errors();
 		// 'row_count'
-		$c = $this->db_get_rowcount();
+		$c = $this->db_get_rowcount(false);
 		if ( $c === false ) {
+			if ( $lock )
+				$this->db_unlock_table();
 			return false;
 		}
 		
@@ -4276,13 +4325,13 @@ EOQ;
 
 		$w = '' . ($tm - $hour);
 		$a = $this->db_FUNC('COUNT(*)',
-			"seenlast > {$w} AND ({$types})");
+			"seenlast > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'hour';
 			$r['hour'] = $a[0][0];
 		}
 		$a = $this->db_FUNC('COUNT(*)',
-			"seeninit > {$w} AND ({$types})");
+			"seeninit > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'hourinit';
 			$r['hourinit'] = $a[0][0];
@@ -4290,13 +4339,13 @@ EOQ;
 
 		$w = '' . ($tm - $day);
 		$a = $this->db_FUNC('COUNT(*)',
-			"seenlast > {$w} AND ({$types})");
+			"seenlast > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'day';
 			$r['day'] = $a[0][0];
 		}
 		$a = $this->db_FUNC('COUNT(*)',
-			"seeninit > {$w} AND ({$types})");
+			"seeninit > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'dayinit';
 			$r['dayinit'] = $a[0][0];
@@ -4304,52 +4353,59 @@ EOQ;
 
 		$w = '' . ($tm - $week);
 		$a = $this->db_FUNC('COUNT(*)',
-			"seenlast > {$w} AND ({$types})");
+			"seenlast > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'week';
 			$r['week'] = $a[0][0];
 		}
 		$a = $this->db_FUNC('COUNT(*)',
-			"seeninit > {$w} AND ({$types})");
+			"seeninit > {$w} AND ({$types})", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'weekinit';
 			$r['weekinit'] = $a[0][0];
 		}
 
-		$a = $this->db_FUNC("SUM(hitcount)", "{$types}");
+		$a = $this->db_FUNC("SUM(hitcount)", "{$types}", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'htotal';
 			$r['htotal'] = $a[0][0];
 		}
 
 		$w = 'white';
-		$a = $this->db_FUNC('COUNT(*)', "lasttype = '{$w}'");
+		$a = $this->db_FUNC('COUNT(*)',
+			"lasttype = '{$w}'", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'white';
 			$r['white'] = $a[0][0];
 		}
 		
 		$w = 'black';
-		$a = $this->db_FUNC('COUNT(*)', "lasttype = '{$w}'");
+		$a = $this->db_FUNC('COUNT(*)',
+			"lasttype = '{$w}'", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'black';
 			$r['black'] = $a[0][0];
 		}
 
 		$w = 'torx';
-		$a = $this->db_FUNC('COUNT(*)', "lasttype = '{$w}'");
+		$a = $this->db_FUNC('COUNT(*)',
+			"lasttype = '{$w}'", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'tor';
 			$r['tor'] = $a[0][0];
 		}
 		
 		$w = 'non';
-		$a = $this->db_FUNC('COUNT(*)', "lasttype = '{$w}'");
+		$a = $this->db_FUNC('COUNT(*)',
+			"lasttype = '{$w}'", null, false);
 		if ( $a !== false && is_array($a[0]) && (int)$a[0][0] > 0 ) {
 			$r['k'][] = 'non';
 			$r['non'] = $a[0][0];
 		}
 		
+		if ( $lock )
+			$this->db_unlock_table();
+
 		$tf = self::best_time() - $tf;
 		self::dbglog('database info gathered in ' . $tf . ' seconds');
 		return $r;
@@ -4445,7 +4501,8 @@ class Spam_BLIP_widget_class extends WP_Widget {
 
 		// use no class, but do use deprecated align
 		$code = sprintf('Spam_BLIP_widget_%06u', rand());
-		$dv = '<div id="'.$code.'" class="widget" align="left">';
+		// overdue: 1.0.4 removed deprecated align
+		$dv = '<div id="'.$code.'" class="widget">';
 		echo "\n<!-- Spam BLIP plugin: info widget div -->\n{$dv}";
 
 		$wt = 'wptexturize';  // display with char translations
@@ -4618,7 +4675,8 @@ class Spam_BLIP_widget_class extends WP_Widget {
 			);
 		}
 		if ( $cap ) {
-			echo '<p><span align="center">' .$wt($cap). '</span></p>';
+			// overdue: 1.0.4 removed deprecated align
+			echo '<p><span>' . $wt($cap) . '</span></p>';
 		}
 		echo "\n</div>\n";
 		echo "<!-- Spam BLIP plugin: info widget div ends -->\n";
