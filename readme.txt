@@ -118,7 +118,7 @@ Think 'BLacklist IP'.
 == Changelog ==
 
 = 1.0.4 =
-* Check with WordPress 3.9.1: OK.
+* Checks with WordPress 3.9.1: OK.
 * Add more advisory locking around database table accesses.
 * Bug fix in black/white list range handling (from 1.0.3).
 
@@ -164,7 +164,7 @@ Think 'BLacklist IP'.
 == Upgrade Notice ==
 
 = 1.0.4 =
-* Check with WordPress 3.9.1: OK.
+* Checks with WordPress 3.9.1: OK.
 
 = 1.0.3 =
 * Checked with shiny new WordPress 3.9, *but* not with PHP 3.5 and
@@ -178,4 +178,4 @@ Think 'BLacklist IP'.
 
 = 1.0.0 =
 * Initial release.
-	
+
