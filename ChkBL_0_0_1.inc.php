@@ -69,7 +69,11 @@ class ChkBL_0_0_1 {
 		// free of charge, currently without limit and I intend
 		// to keep it that way.''
 		// http://www.usenix.org.uk/content/rbl.html
-		array('all.s5h.net', '127.0.0.1', null),
+		// Update 06-2014: looks like s5h has changes to using
+		// 127.0.0.2, although web page says nothing (at all
+		// about returns) -- so, change to 127.0.0.3 and use
+		// the '&' op.
+		array('all.s5h.net', '127.0.0.3', '3,&'),
 		// has been tried, but at end of list, therefore not
 		// really evaluated -- but, has given hits
 		// http://bbq.uso800.net/code.html
