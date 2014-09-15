@@ -3,7 +3,7 @@
 Plugin Name: Spam BLIP
 Plugin URI: http://agalena.nfshost.com/b1/spam-blip-wordpress-comment-spam-plugin
 Description: Stop comment spam before it is posted.
-Version: 1.0.5
+Version: 1.0.5.1
 Author: Ed Hynan
 Author URI: http://agalena.nfshost.com/b1/
 License: GNU GPLv3 (see http://www.gnu.org/licenses/gpl-3.0.html)
@@ -4459,6 +4459,8 @@ class Spam_BLIP_widget_class extends WP_Widget {
 		extract($args);
 
 		$ud  = $this->plinst->get_usedata_option();
+		$bc  = $this->plinst->get_comments_open_option();
+		$bp  = $this->plinst->get_pings_open_option();
 		$inf = false;
 		if ( $ud != 'false' && ($bc != 'false' || $bp != 'false') ) {
 			$inf = $this->plinst->get_db_info();
@@ -4482,8 +4484,6 @@ class Spam_BLIP_widget_class extends WP_Widget {
 
 		if ( $showopt == 'true' ) {
 			// get some options to show if true
-			$bc  = $this->plinst->get_comments_open_option();
-			$bp  = $this->plinst->get_pings_open_option();
 			$br  = $this->plinst->get_user_regi_option();
 			$tw  = $this->plinst->get_torwhite_option();
 			$bo  = $this->plinst->get_bailout_option();
@@ -4690,7 +4690,7 @@ class Spam_BLIP_widget_class extends WP_Widget {
 	}
 
 	public function update($new_instance, $old_instance) {
-		// form ctls: URL is checkbox
+		// form ctls: OPT and URL are checkboxes
 		$i = array(
 			'title' => '',
 			'caption' => '',
@@ -4735,7 +4735,12 @@ class Spam_BLIP_widget_class extends WP_Widget {
 		$et = 'rawurlencode'; // %XX -- for transfer
 
 		// form ctls: URL is checkbox
-		$val = array('title' => '', 'caption' => '', 'URL' => 'false');
+		$val = array(
+			'title' => '',
+			'caption' => '',
+			'OPT' => 'false',
+			'URL' => 'false'
+		);
 		$instance = wp_parse_args((array)$instance, $val);
 
 		$val = '';
