@@ -1,4 +1,4 @@
-# Spam_BLIP 1.0.5 Pot Source
+# Spam_BLIP 1.0.5.1 Pot Source
 # Copyright (C) 2013 Ed Hynan
 # This file is distributed under the same license as the Spam_BLIP package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Spam_BLIP 1.0.5\n"
+"Project-Id-Version: Spam_BLIP 1.0.5.1\n"
 "Report-Msgid-Bugs-To: edhynan@gmail.com\n"
-"POT-Creation-Date: 2014-09-15 08:57-0400\n"
-"PO-Revision-Date: 2014-09-15 08:57 EDT\n"
+"POT-Creation-Date: 2014-09-15 09:47-0400\n"
+"PO-Revision-Date: 2014-09-15 09:47 EDT\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en_US\n"
@@ -1496,18 +1496,18 @@ msgstr ""
 "\t\t\t\tplugin.\n"
 "\t\t\t\t</p>"
 
-#: Spam_BLIP.php:4747
+#: Spam_BLIP.php:4752
 msgid "Widget title:"
 msgstr "Widget title:"
 
-#: Spam_BLIP.php:4762
+#: Spam_BLIP.php:4767
 msgid "Caption:"
 msgstr "Caption:"
 
-#: Spam_BLIP.php:4777
+#: Spam_BLIP.php:4782
 msgid "Show <em>Spam BLIP</em> options:&nbsp;"
 msgstr "Show <em>Spam BLIP</em> options:&nbsp;"
 
-#: Spam_BLIP.php:4790
+#: Spam_BLIP.php:4795
 msgid "Show <em>Spam BLIP</em> link:&nbsp;"
 msgstr "Show <em>Spam BLIP</em> link:&nbsp;"
