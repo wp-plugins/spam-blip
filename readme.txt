@@ -3,8 +3,8 @@ Contributors: EdHynan
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick%DONATE_LINK%hosted_button_id=4Q2Y8ZUG8HXLC
 Tags: anti-spam, comment spam, spam comments, blog spam, blog, comment, comments, content, links, network, plugin, post, Post, posts, security, spam, wordpress
 Requires at least: 3.0.2
-Tested up to: 3.9.1
-Stable tag: 1.0.4
+Tested up to: 4.0
+Stable tag: 1.0.5
 Text Domain: spambl_l10n
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -12,9 +12,6 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Spam BLIP stops comment spam before it is posted, using DNS blacklists, existing comments marked as spam, and user defined lists.
 
 == Description ==
-
-If you accidentally named your new twins Viagra and Nike, then
-you've been seeing those names much too much. You need Spam BLIP!
 
 Spam BLIP stops comment and ping spam from being posted, primarily by
 checking the IP address attempting to post a comment in one or more
@@ -117,6 +114,9 @@ Think 'BLacklist IP'.
 
 == Changelog ==
 
+= 1.0.5 =
+* Checks with WordPress 4.0: OK.
+
 = 1.0.4 =
 * Checks with WordPress 3.9.1: OK.
 * Add more advisory locking around database table accesses.
@@ -162,6 +162,9 @@ Think 'BLacklist IP'.
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+* Checks with WordPress 4.0: OK.
 
 = 1.0.4 =
 * Checks with WordPress 3.9.1: OK.

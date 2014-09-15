@@ -1,4 +1,4 @@
-# Spam_BLIP 1.0.4 Pot Source
+# Spam_BLIP 1.0.5 Pot Source
 # Copyright (C) 2013 Ed Hynan
 # This file is distributed under the same license as the Spam_BLIP package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Spam_BLIP 1.0.4\n"
+"Project-Id-Version: Spam_BLIP 1.0.5\n"
 "Report-Msgid-Bugs-To: edhynan@gmail.com\n"
-"POT-Creation-Date: 2014-05-09 08:17-0400\n"
-"PO-Revision-Date: 2014-05-09 08:17 EDT\n"
+"POT-Creation-Date: 2014-09-15 08:57-0400\n"
+"PO-Revision-Date: 2014-09-15 08:57 EDT\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en_US\n"
@@ -1344,12 +1344,12 @@ msgid "Found \"%s\" to be a tor exit, by DNS -- passed per option"
 msgstr "Found \"%s\" to be a tor exit, by DNS -- passed per option"
 
 #. Label shown on widgets page
-#: Spam_BLIP.php:4404
+#: Spam_BLIP.php:4439
 msgid "Spam BLIP"
 msgstr "Spam BLIP"
 
 #. Description shown under label shown on widgets page
-#: Spam_BLIP.php:4406
+#: Spam_BLIP.php:4441
 msgid ""
 "Display comment and ping spam hit information, and database table row "
 "count"
@@ -1357,131 +1357,131 @@ msgstr ""
 "Display comment and ping spam hit information, and database table row "
 "count"
 
-#: Spam_BLIP.php:4479
+#: Spam_BLIP.php:4519
 msgid "Options:"
 msgstr "Options:"
 
-#: Spam_BLIP.php:4485
+#: Spam_BLIP.php:4525
 msgid "Checking for comment spam"
 msgstr "Checking for comment spam"
 
-#: Spam_BLIP.php:4490
+#: Spam_BLIP.php:4530
 msgid "Checking for ping spam"
 msgstr "Checking for ping spam"
 
-#: Spam_BLIP.php:4495
+#: Spam_BLIP.php:4535
 msgid "Checking user registration"
 msgstr "Checking user registration"
 
-#: Spam_BLIP.php:4500
+#: Spam_BLIP.php:4540
 msgid "Checking in saved spam"
 msgstr "Checking in saved spam"
 
-#: Spam_BLIP.php:4505
+#: Spam_BLIP.php:4545
 msgid "Bailing out on hits"
 msgstr "Bailing out on hits"
 
-#: Spam_BLIP.php:4510
+#: Spam_BLIP.php:4550
 msgid "Saving non-hits"
 msgstr "Saving non-hits"
 
-#: Spam_BLIP.php:4515
+#: Spam_BLIP.php:4555
 msgid "Whitelisting TOR exits"
 msgstr "Whitelisting TOR exits"
 
-#: Spam_BLIP.php:4520
+#: Spam_BLIP.php:4560
 msgid "Not rejecting hits"
 msgstr "Not rejecting hits"
 
-#: Spam_BLIP.php:4528
+#: Spam_BLIP.php:4568
 msgid "Records:"
 msgstr "Records:"
 
-#: Spam_BLIP.php:4544
+#: Spam_BLIP.php:4584
 #, possible-php-format
 msgid "%d address listed"
 msgid_plural "%d addresses listed"
 msgstr[0] "%d address listed"
 msgstr[1] "%d addresses listed"
 
-#: Spam_BLIP.php:4551
+#: Spam_BLIP.php:4591
 #, possible-php-format
 msgid "%d user whitelist address"
 msgid_plural "%d user whitelist addresses"
 msgstr[0] "%d user whitelist address"
 msgstr[1] "%d user whitelist addresses"
 
-#: Spam_BLIP.php:4558
+#: Spam_BLIP.php:4598
 #, possible-php-format
 msgid "%d user blacklist address"
 msgid_plural "%d user blacklist addresses"
 msgstr[0] "%d user blacklist address"
 msgstr[1] "%d user blacklist addresses"
 
-#: Spam_BLIP.php:4565
+#: Spam_BLIP.php:4605
 #, possible-php-format
 msgid "%d non-hit address"
 msgid_plural "%d non-hit addresses"
 msgstr[0] "%d non-hit address"
 msgstr[1] "%d non-hit addresses"
 
-#: Spam_BLIP.php:4572
+#: Spam_BLIP.php:4612
 #, possible-php-format
 msgid "%d tor exit node"
 msgid_plural "%d tor exit nodes"
 msgstr[0] "%d tor exit node"
 msgstr[1] "%d tor exit nodes"
 
-#: Spam_BLIP.php:4579
+#: Spam_BLIP.php:4619
 #, possible-php-format
 msgid "%d address in the past hour"
 msgid_plural "%d addresses in the past hour"
 msgstr[0] "%d address in the past hour"
 msgstr[1] "%d addresses in the past hour"
 
-#: Spam_BLIP.php:4586
+#: Spam_BLIP.php:4626
 #, possible-php-format
 msgid "%d new address in the past hour"
 msgid_plural "%d new addresses in the past hour"
 msgstr[0] "%d new address in the past hour"
 msgstr[1] "%d new addresses in the past hour"
 
-#: Spam_BLIP.php:4593
+#: Spam_BLIP.php:4633
 #, possible-php-format
 msgid "%d address in the past day"
 msgid_plural "%d addresses in the past day"
 msgstr[0] "%d address in the past day"
 msgstr[1] "%d addresses in the past day"
 
-#: Spam_BLIP.php:4600
+#: Spam_BLIP.php:4640
 #, possible-php-format
 msgid "%d new address in the past day"
 msgid_plural "%d new addresses in the past day"
 msgstr[0] "%d new address in the past day"
 msgstr[1] "%d new addresses in the past day"
 
-#: Spam_BLIP.php:4607
+#: Spam_BLIP.php:4647
 #, possible-php-format
 msgid "%d address in the past week"
 msgid_plural "%d addresses in the past week"
 msgstr[0] "%d address in the past week"
 msgstr[1] "%d addresses in the past week"
 
-#: Spam_BLIP.php:4614
+#: Spam_BLIP.php:4654
 #, possible-php-format
 msgid "%d new address in the past week"
 msgid_plural "%d new addresses in the past week"
 msgstr[0] "%d new address in the past week"
 msgstr[1] "%d new addresses in the past week"
 
-#: Spam_BLIP.php:4621
+#: Spam_BLIP.php:4661
 #, possible-php-format
 msgid "%d hit in all records"
 msgid_plural "total of %d hits in all records"
 msgstr[0] "%d hit in all records"
 msgstr[1] "total of %d hits in all records"
 
-#: Spam_BLIP.php:4634
+#: Spam_BLIP.php:4674
 #, possible-php-format
 msgid ""
 "<br><p>\n"
@@ -1496,14 +1496,18 @@ msgstr ""
 "\t\t\t\tplugin.\n"
 "\t\t\t\t</p>"
 
-#: Spam_BLIP.php:4699
+#: Spam_BLIP.php:4747
 msgid "Widget title:"
 msgstr "Widget title:"
 
-#: Spam_BLIP.php:4712
+#: Spam_BLIP.php:4762
 msgid "Caption:"
 msgstr "Caption:"
 
-#: Spam_BLIP.php:4725
-msgid "Show <em>Spam BLIP</em> URL:&nbsp;"
-msgstr "Show <em>Spam BLIP</em> URL:&nbsp;"
+#: Spam_BLIP.php:4777
+msgid "Show <em>Spam BLIP</em> options:&nbsp;"
+msgstr "Show <em>Spam BLIP</em> options:&nbsp;"
+
+#: Spam_BLIP.php:4790
+msgid "Show <em>Spam BLIP</em> link:&nbsp;"
+msgstr "Show <em>Spam BLIP</em> link:&nbsp;"
