@@ -3,7 +3,7 @@ Contributors: EdHynan
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick%DONATE_LINK%hosted_button_id=4Q2Y8ZUG8HXLC
 Tags: anti-spam, comment spam, spam comments, blog spam, blog, comment, comments, content, links, network, plugin, post, Post, posts, security, spam, wordpress
 Requires at least: 3.0.2
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 1.0.5.1
 Text Domain: spambl_l10n
 License: GPLv3 or later
