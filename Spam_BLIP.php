@@ -2589,8 +2589,8 @@ class Spam_BLIP_class {
 			'txvalr' => $vr,
 			// TRANSLATORS: these are labels above textarea elements
 			// do not use html entities
-			'ltxlb' => self::wt(__('Active User Whitelist:')),
-			'rtxlb' => self::wt(__('Inactive User Whitelist:')),
+			'ltxlb' => self::wt(__('Active User Whitelist:', 'spambl_l10n')),
+			'rtxlb' => self::wt(__('Inactive User Whitelist:', 'spambl_l10n')),
 			// option (map) names as textarea IDs
 			'ltxid' => $ol,
 			'rtxid' => $or,
@@ -2601,8 +2601,8 @@ class Spam_BLIP_class {
 			// effect is to move a line of text from one to the other;
 			// '<<' and '>>' should suggest movement left and right
 			// do not use html entities
-			'lbttx' => self::wt(__('Move address right >>')),
-			'rbttx' => self::wt(__('<< Move address left')),
+			'lbttx' => self::wt(__('Move address right >>', 'spambl_l10n')),
+			'rbttx' => self::wt(__('<< Move address left', 'spambl_l10n')),
 			// incr for each, table element
 			'tableid' => 'evhplg_tpair_table2',
 			// incr for each, debug span element
@@ -2661,8 +2661,8 @@ class Spam_BLIP_class {
 			'txvalr' => $vr,
 			// TRANSLATORS: these are labels above textarea elements
 			// do not use html entities
-			'ltxlb' => self::wt(__('Active User Blacklist:')),
-			'rtxlb' => self::wt(__('Inactive User Blacklist:')),
+			'ltxlb' => self::wt(__('Active User Blacklist:', 'spambl_l10n')),
+			'rtxlb' => self::wt(__('Inactive User Blacklist:', 'spambl_l10n')),
 			// option (map) names as textarea IDs
 			'ltxid' => $ol,
 			'rtxid' => $or,
@@ -2673,8 +2673,8 @@ class Spam_BLIP_class {
 			// effect is to move a line of text from one to the other;
 			// '<<' and '>>' should suggest movement left and right
 			// do not use html entities
-			'lbttx' => self::wt(__('Move address right >>')),
-			'rbttx' => self::wt(__('<< Move address left')),
+			'lbttx' => self::wt(__('Move address right >>', 'spambl_l10n')),
+			'rbttx' => self::wt(__('<< Move address left', 'spambl_l10n')),
 			// incr for each, table element
 			'tableid' => 'evhplg_tpair_table3',
 			// incr for each, debug span element
@@ -2742,8 +2742,8 @@ class Spam_BLIP_class {
 			'txvalr' => $vr,
 			// TRANSLATORS: these are labels above textarea elements
 			// do not use html entities
-			'ltxlb' => self::wt(__('Active DNS Blacklists:')),
-			'rtxlb' => self::wt(__('Inactive DNS Blacklists:')),
+			'ltxlb' => self::wt(__('Active DNS Blacklists:', 'spambl_l10n')),
+			'rtxlb' => self::wt(__('Inactive DNS Blacklists:', 'spambl_l10n')),
 			// option (map) names as textarea IDs
 			'ltxid' => $ol,
 			'rtxid' => $or,
@@ -2754,8 +2754,8 @@ class Spam_BLIP_class {
 			// effect is to move a line of text from one to the other;
 			// '<<' and '>>' should suggest movement left and right
 			// do not use html entities
-			'lbttx' => self::wt(__('Move line right >>')),
-			'rbttx' => self::wt(__('<< Move line left')),
+			'lbttx' => self::wt(__('Move line right >>', 'spambl_l10n')),
+			'rbttx' => self::wt(__('<< Move line left', 'spambl_l10n')),
 			// incr for each, table element
 			'tableid' => 'evhplg_tpair_table1',
 			// incr for each, debug span element
